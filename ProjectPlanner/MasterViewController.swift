@@ -14,6 +14,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     var detailViewController: DetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
+    let helper = Helper()
 
 
     override func viewDidLoad()
@@ -129,6 +130,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     func configureCell(_ cell: UITableViewCell, withProject project: Project)
     {
         cell.textLabel!.text = project.name
+        let unWrappedDate = helper.unwrapDate(optionalDate: project.dueDate)
+        cell.detailTextLabel!.text = helper.dateToString(date: unWrappedDate)
     }
 
     // MARK: - Fetched results controller
