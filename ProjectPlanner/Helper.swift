@@ -64,10 +64,11 @@ struct Helper
         
         if let optionalDate = optionalDate
         {
-            unWrappedDate = optionalDate
+            let unWrappedDateString = dateToString(date: optionalDate)
+            unWrappedDate = dateFormatter.date(from: unWrappedDateString) ?? Date()
         }
         
-        print("Optional Bool unwraped -> \(unWrappedDate)")
+        print("Optional Date unwraped -> \(unWrappedDate)")
         return unWrappedDate
     }
     
@@ -78,6 +79,27 @@ struct Helper
         let dateString = dateFormatter.string(from: date)
         
         return dateString
+    }
+    
+    func segmentIndexToString(segmentIndex: Int) -> String
+    {
+        return
+            segmentIndex == 0
+            ?
+            "High"
+            :
+            (
+                segmentIndex == 1
+                ?
+                "Medium"
+                :
+                "Low"
+            )
+    }
+    
+    func stringToSegmentIndex(priority: String) -> Int
+    {
+        return priority == "High" ? 0 : (priority == "Medium" ? 1 : 2)
     }
 
 }

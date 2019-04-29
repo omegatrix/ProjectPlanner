@@ -71,7 +71,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             {
                 let object = fetchedResultsController.object(at: indexPath)
                 let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
-                controller.detailItem = object
+                controller.project = object
                 controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
@@ -132,6 +132,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         cell.textLabel!.text = project.name
         let unWrappedDate = helper.unwrapDate(optionalDate: project.dueDate)
         cell.detailTextLabel!.text = helper.dateToString(date: unWrappedDate)
+        
+        print("Date in master detail view -> \(unWrappedDate)")
+
     }
 
     // MARK: - Fetched results controller
@@ -149,7 +152,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "dueDate", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: "dueDate", ascending: true)
         
         fetchRequest.sortDescriptors = [sortDescriptor]
         
