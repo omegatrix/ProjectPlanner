@@ -39,7 +39,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="taskCell" id="SKt-Kh-cLE">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="taskCell" id="SKt-Kh-cLE" customClass="TaskTableViewCell" customModule="ProjectPlanner" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="951" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="SKt-Kh-cLE" id="ShA-Cu-d4y">
@@ -50,7 +50,7 @@
                                 </prototypes>
                             </tableView>
                             <containerView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vq1-V5-coA">
-                                <rect key="frame" x="20" y="74" width="951" height="200"/>
+                                <rect key="frame" x="20" y="74" width="950" height="200"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <connections>
                                     <segue destination="kcf-P8-c7x" kind="embed" identifier="projectSummary" id="r9g-Cp-0lq"/>
@@ -247,14 +247,14 @@
             <objects>
                 <viewController id="kcf-P8-c7x" customClass="ProjectSummaryViewController" customModule="ProjectPlanner" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nl3-qp-Ho3">
-                        <rect key="frame" x="0.0" y="0.0" width="951" height="200"/>
+                        <rect key="frame" x="0.0" y="0.0" width="950" height="200"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="7fr-Nc-Adq">
-                                <rect key="frame" x="275" y="22" width="401" height="156"/>
+                                <rect key="frame" x="275" y="22" width="400" height="156"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Project Summary" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a2K-99-46D">
-                                        <rect key="frame" x="126.5" y="0.0" width="148.5" height="26"/>
+                                        <rect key="frame" x="126" y="0.0" width="148.5" height="26"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="26" id="Gy5-hE-dDK"/>
                                         </constraints>
@@ -263,13 +263,13 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Project name &amp; Priority" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EY9-Zb-ekj">
-                                        <rect key="frame" x="102" y="65" width="197.5" height="24"/>
+                                        <rect key="frame" x="101.5" y="65" width="197.5" height="24"/>
                                         <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xbb-o4-0T9">
-                                        <rect key="frame" x="35" y="128" width="331" height="28"/>
+                                        <rect key="frame" x="35" y="128" width="330" height="28"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -281,7 +281,7 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CmC-sE-nrU">
-                                <rect key="frame" x="893" y="150" width="30" height="30"/>
+                                <rect key="frame" x="892" y="150" width="30" height="30"/>
                                 <state key="normal" title="Edit"/>
                                 <connections>
                                     <segue destination="xqQ-gH-pzs" kind="popoverPresentation" identifier="editProject" popoverAnchorView="CmC-sE-nrU" id="diV-Ls-vTR">
@@ -289,6 +289,11 @@
                                     </segue>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AWH-UL-YFo" customClass="CircularProgressBar" customModule="ProjectPlanner" customModuleProvider="target">
+                                <rect key="frame" x="20" y="24" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -304,6 +309,7 @@
                     </view>
                     <connections>
                         <outlet property="label_title" destination="EY9-Zb-ekj" id="Ufa-P1-yh7"/>
+                        <outlet property="progressBar" destination="AWH-UL-YFo" id="R7R-Ka-tht"/>
                         <outlet property="txtView_notes" destination="xbb-o4-0T9" id="gXe-iS-Bbt"/>
                     </connections>
                 </viewController>

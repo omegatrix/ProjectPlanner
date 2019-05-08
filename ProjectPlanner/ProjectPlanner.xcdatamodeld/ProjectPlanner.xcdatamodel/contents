@@ -17,7 +17,7 @@
         <relationship name="project_tasks" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Project" inverseName="tasks" inverseEntity="Project" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Project" positionX="-318" positionY="-240" width="129" height="135"/>
+        <element name="Project" positionX="-318" positionY="-240" width="129" height="133"/>
         <element name="Task" positionX="-52" positionY="-48" width="128" height="133"/>
     </elements>
 </model>

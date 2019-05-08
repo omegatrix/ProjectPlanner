@@ -122,8 +122,7 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
                     
                     do
                     {
-                        let fetchedObject =
-                            try managedContext.fetch(fetchedRequest)
+                        let fetchedObject = try managedContext.fetch(fetchedRequest)
                         
                         let objectToUpdate = fetchedObject.first as! NSManagedObject
                         objectToUpdate.setValue(newName, forKey: "name")

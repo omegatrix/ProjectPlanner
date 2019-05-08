@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		690AED9522830E8A00FCA292 /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690AED9422830E8A00FCA292 /* TaskTableViewCell.swift */; };
+		690AED972283167E00FCA292 /* CircularProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690AED962283167E00FCA292 /* CircularProgressBar.swift */; };
 		6919819822739D7F007F7B45 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6919819722739D7F007F7B45 /* AppDelegate.swift */; };
 		6919819D22739D7F007F7B45 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6919819C22739D7F007F7B45 /* MasterViewController.swift */; };
 		6919819F22739D7F007F7B45 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6919819E22739D7F007F7B45 /* DetailViewController.swift */; };
@@ -20,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		690AED9422830E8A00FCA292 /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
+		690AED962283167E00FCA292 /* CircularProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgressBar.swift; sourceTree = "<group>"; };
 		6919819422739D7F007F7B45 /* ProjectPlanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProjectPlanner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6919819722739D7F007F7B45 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6919819C22739D7F007F7B45 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
@@ -75,6 +79,8 @@
 				69DD2CB82274B44300B83533 /* Add_Edit_ProjectViewController.swift */,
 				69DD2CBA22750D1200B83533 /* Helper.swift */,
 				694BB2C02275ED9C0005E85F /* ProjectSummaryViewController.swift */,
+				690AED9422830E8A00FCA292 /* TaskTableViewCell.swift */,
+				690AED962283167E00FCA292 /* CircularProgressBar.swift */,
 			);
 			path = ProjectPlanner;
 			sourceTree = "<group>";
@@ -150,7 +156,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				690AED9522830E8A00FCA292 /* TaskTableViewCell.swift in Sources */,
 				6919819822739D7F007F7B45 /* AppDelegate.swift in Sources */,
+				690AED972283167E00FCA292 /* CircularProgressBar.swift in Sources */,
 				694BB2C12275ED9C0005E85F /* ProjectSummaryViewController.swift in Sources */,
 				6919819D22739D7F007F7B45 /* MasterViewController.swift in Sources */,
 				691981B02273A0A3007F7B45 /* ProjectPlanner.xcdatamodeld in Sources */,

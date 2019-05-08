@@ -19,6 +19,7 @@ class ProjectSummaryViewController: UIViewController
 //    var projectDueDate: Date?
 //    var projectAddToCalendar: Bool?
     
+    @IBOutlet weak var progressBar: CircularProgressBar!
     @IBOutlet weak var label_title: UILabel!
     @IBOutlet weak var txtView_notes: UITextView!
     
@@ -36,12 +37,18 @@ class ProjectSummaryViewController: UIViewController
             let notes = helper.unwrapBoolean(optionalBool: project?.notes?.isEmpty) ? "No notes available!" : helper.unwrapString(optionalString: project?.notes)
             label_title.text = "\(helper.unwrapString(optionalString: project?.name)) - \(helper.unwrapString(optionalString: project?.priority)) Priority"
             txtView_notes.text = notes
+            
+            progressBar.labelSize = 20
+            progressBar.safePercent = 45
+            progressBar.setProgress(to: 45, withAnimation: true)
+            progressBar.lineWidth = 5
         }
         
         else
         {
             label_title.text = nil
             txtView_notes.text = nil
+            
         }
         
     }
