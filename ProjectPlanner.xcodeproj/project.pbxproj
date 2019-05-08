@@ -17,6 +17,7 @@
 		691981A722739D81007F7B45 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 691981A522739D81007F7B45 /* LaunchScreen.storyboard */; };
 		691981B02273A0A3007F7B45 /* ProjectPlanner.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 691981AE2273A0A3007F7B45 /* ProjectPlanner.xcdatamodeld */; };
 		694BB2C12275ED9C0005E85F /* ProjectSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694BB2C02275ED9C0005E85F /* ProjectSummaryViewController.swift */; };
+		69BFB59D22837AC000A12449 /* Add_Edit_TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69BFB59C22837AC000A12449 /* Add_Edit_TaskViewController.swift */; };
 		69DD2CB92274B44300B83533 /* Add_Edit_ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DD2CB82274B44300B83533 /* Add_Edit_ProjectViewController.swift */; };
 		69DD2CBB22750D1200B83533 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DD2CBA22750D1200B83533 /* Helper.swift */; };
 /* End PBXBuildFile section */
@@ -34,6 +35,7 @@
 		691981A822739D81007F7B45 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		691981AF2273A0A3007F7B45 /* ProjectPlanner.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ProjectPlanner.xcdatamodel; sourceTree = "<group>"; };
 		694BB2C02275ED9C0005E85F /* ProjectSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSummaryViewController.swift; sourceTree = "<group>"; };
+		69BFB59C22837AC000A12449 /* Add_Edit_TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Add_Edit_TaskViewController.swift; sourceTree = "<group>"; };
 		69DD2CB82274B44300B83533 /* Add_Edit_ProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Add_Edit_ProjectViewController.swift; sourceTree = "<group>"; };
 		69DD2CBA22750D1200B83533 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -81,6 +83,7 @@
 				694BB2C02275ED9C0005E85F /* ProjectSummaryViewController.swift */,
 				690AED9422830E8A00FCA292 /* TaskTableViewCell.swift */,
 				690AED962283167E00FCA292 /* CircularProgressBar.swift */,
+				69BFB59C22837AC000A12449 /* Add_Edit_TaskViewController.swift */,
 			);
 			path = ProjectPlanner;
 			sourceTree = "<group>";
@@ -165,6 +168,7 @@
 				69DD2CB92274B44300B83533 /* Add_Edit_ProjectViewController.swift in Sources */,
 				6919819F22739D7F007F7B45 /* DetailViewController.swift in Sources */,
 				69DD2CBB22750D1200B83533 /* Helper.swift in Sources */,
+				69BFB59D22837AC000A12449 /* Add_Edit_TaskViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

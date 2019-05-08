@@ -54,6 +54,20 @@ struct Helper
         return unWrappedDouble
     }
     
+    /* Optional unwrap -> Int */
+    func unwrapInt(optionalInt: Int16?) -> Int16
+    {
+        var unWrappedInt: Int16 = 0 //default value to return
+        
+        if let optionalInt = optionalInt
+        {
+            unWrappedInt = optionalInt
+        }
+        
+        print("Optional Bool unwraped -> \(optionalInt)")
+        return unWrappedInt
+    }
+    
     /* Optional unwrap -> Date */
     func unwrapDate(optionalDate: Date?) -> Date
     {
@@ -100,6 +114,11 @@ struct Helper
     func stringToSegmentIndex(priority: String) -> Int
     {
         return priority == "High" ? 0 : (priority == "Medium" ? 1 : 2)
+    }
+    
+    func intToFloat(value: Int16) -> Float
+    {
+        return Float(value)
     }
 
 }

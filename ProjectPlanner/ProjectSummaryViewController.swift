@@ -19,9 +19,11 @@ class ProjectSummaryViewController: UIViewController
 //    var projectDueDate: Date?
 //    var projectAddToCalendar: Bool?
     
-    @IBOutlet weak var progressBar: CircularProgressBar!
+    @IBOutlet weak var progressBar_daysRemaining: CircularProgressBar!
+    @IBOutlet weak var progressBar_percentage: CircularProgressBar!
     @IBOutlet weak var label_title: UILabel!
     @IBOutlet weak var txtView_notes: UITextView!
+    @IBOutlet weak var label_addedToCalendar: UILabel!
     
     override func viewDidLoad()
     {
@@ -33,22 +35,30 @@ class ProjectSummaryViewController: UIViewController
             self.txtView_notes.layer.borderWidth = 1
             self.txtView_notes.isEditable = false
             
-            let addedToCalendar = helper.unwrapBoolean(optionalBool: project?.addToCalendar) ? "Yes" : "No"
+            let addedToCalendar = "Added to calendar: \(helper.unwrapBoolean(optionalBool: project?.addToCalendar) ? "Yes" : "No")"
             let notes = helper.unwrapBoolean(optionalBool: project?.notes?.isEmpty) ? "No notes available!" : helper.unwrapString(optionalString: project?.notes)
             label_title.text = "\(helper.unwrapString(optionalString: project?.name)) - \(helper.unwrapString(optionalString: project?.priority)) Priority"
             txtView_notes.text = notes
+            label_addedToCalendar.text = addedToCalendar
             
-            progressBar.labelSize = 20
-            progressBar.safePercent = 45
-            progressBar.setProgress(to: 45, withAnimation: true)
-            progressBar.lineWidth = 5
+            progressBar_percentage.labelSize = 20
+            progressBar_percentage.safePercent = 100
+            progressBar_percentage.setProgress(to: 45, withAnimation: true)
+            progressBar_percentage.lineWidth = 20
+            
+            progressBar_daysRemaining.labelSize = 20
+            progressBar_daysRemaining.safePercent = 100
+            progressBar_daysRemaining.setProgress(to: 20, withAnimation: true)
+            progressBar_daysRemaining.lineWidth = 20
         }
         
         else
         {
             label_title.text = nil
             txtView_notes.text = nil
-            
+            label_addedToCalendar.text = nil
+            progressBar_percentage.hideView()
+            progressBar_daysRemaining.hideView()
         }
         
     }

@@ -60,7 +60,7 @@ class CircularProgressBar: UIView
         {
             get
             {
-                if progressConstant > 1 { return 1 }
+                if progressConstant > 1 { return progressConstant }
                 else if progressConstant < 0 { return 0 }
                 else { return progressConstant }
             }
@@ -89,6 +89,7 @@ class CircularProgressBar: UIView
             {
                 currentTime += 0.05
                 let percent = currentTime/2 * 100
+                //self.label.text = "\(Int(progress * percent))"
                 self.label.text = "\(Int(progress * percent))"
                 self.setForegroundLayerColorForSafePercent()
                 self.configLabel()
@@ -97,6 +98,16 @@ class CircularProgressBar: UIView
         
         timer.fire()
         
+    }
+    
+    public func showView()
+    {
+        self.isHidden = false
+    }
+    
+    public func hideView()
+    {
+        self.isHidden = true
     }
     
     

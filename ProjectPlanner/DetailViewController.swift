@@ -26,6 +26,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.tableView.delegate = self
         self.tableView.dataSource = self
         print("This is the object ID -> \(project?.objectID) \n Type of \(type(of: project?.objectID))")
+        
+        if project != nil
+        {
+            tasks = project?.tasks?.allObjects as! [Task]
+        }
     }
 
     var project: Project?
@@ -60,12 +65,13 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
         }
         
-//        if segue.identifier == "addAlbum"
-//        {
-//            if let addAlbumViewController = segue.destination as? AddAlbumViewController{
-//                addAlbumViewController.currentArtist = artist
-//            }
-//        }
+        if segue.identifier == "addEditTaskSegue"
+        {
+            if let addTask = segue.destination as? Add_Edit_TaskViewController
+            {
+                addTask.currentProject = project
+            }
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int

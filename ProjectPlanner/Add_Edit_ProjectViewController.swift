@@ -12,12 +12,6 @@ import CoreData
 class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
 {
     var project: Project?
-//    var projectName: String = ""
-//    var projectNote: String = ""
-//    var projectPriority: String = ""
-//    var projectDueDate: Date = Date()
-//    var addToCalendar: Bool = true
-//    var isUpdateProject: Bool = false
 
     @IBOutlet weak var txtField_name: UITextField!
     @IBOutlet weak var txtView_note: UITextView!
@@ -41,9 +35,9 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         self.txtView_note.layer.borderWidth = 1
         
         //Assign a placeholder for the UITextView
-        resetTetView()
+        resetTextView()
         
-        if(project != nil)
+        if project != nil
         {
             txtField_name.text = project?.name
             txtView_note.text = project?.notes
@@ -73,7 +67,7 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         
         if(isTextViewEmpty)
         {
-            resetTetView()
+            resetTextView()
         }
     }
     
@@ -173,7 +167,7 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         dismiss(animated: true, completion: nil)
     }
     
-    func resetTetView()
+    func resetTextView()
     {
         self.txtView_note.text = "Please enter any notes here..."
         self.txtView_note.textColor = UIColor.lightGray

@@ -10,7 +10,11 @@ import UIKit
 
 class TaskTableViewCell: UITableViewCell
 {
-
+    @IBOutlet weak var label_title: UILabel!
+    @IBOutlet weak var label_startDate: UILabel!
+    @IBOutlet weak var txtView_notes: UITextView!
+    @IBOutlet weak var label_reminder: UILabel!
+    
     override func awakeFromNib()
     {
         super.awakeFromNib()
