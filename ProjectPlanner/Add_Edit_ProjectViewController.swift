@@ -18,6 +18,7 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
     @IBOutlet weak var segment_priority: UISegmentedControl!
     @IBOutlet weak var datePicker_dueDate: UIDatePicker!
     @IBOutlet weak var switch_addToCalendar: UISwitch!
+    @IBOutlet weak var btn_submit: UIButton!
     
     let helper = Helper()
     
@@ -34,16 +35,22 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         self.txtView_note.layer.borderColor = UIColor.lightGray.cgColor
         self.txtView_note.layer.borderWidth = 1
         
-        //Assign a placeholder for the UITextView
-        resetTextView()
-        
         if project != nil
         {
             txtField_name.text = project?.name
             txtView_note.text = project?.notes
+            txtView_note.textColor = UIColor.black
             segment_priority.selectedSegmentIndex = helper.stringToSegmentIndex(priority: helper.unwrapString(optionalString: project?.priority))
             datePicker_dueDate.date = helper.unwrapDate(optionalDate: project?.dueDate)
             switch_addToCalendar.isOn = helper.unwrapBoolean(optionalBool: project?.addToCalendar)
+            btn_submit.setTitle("Update", for: .normal)
+        }
+        
+        else
+        {
+            //Assign a placeholder for the UITextView
+            resetTextView()
+            btn_submit.setTitle("Save", for: .normal)
         }
     }
     
@@ -91,45 +98,66 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         
         else
         {
- 
             let priority = helper.segmentIndexToString(segmentIndex: segment_priority.selectedSegmentIndex)
-
+            let today = helper.unwrapDate(optionalDate: Date())
             let formattedDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
             
-            if(project != nil)
+            if(formattedDate < today)
             {
-                let newName = txtField_name.text
-                let newNotes = txtView_note.text
-                let newDueDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
-                let newPriority = helper.segmentIndexToString(segmentIndex: segment_priority.selectedSegmentIndex)
-                let newAddToCalendar = helper.unwrapBoolean(optionalBool: switch_addToCalendar.isOn)
+                let alertController = UIAlertController(title: "Alert", message: "Due date cannot be in the past!", preferredStyle: .alert)
                 
-                guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-                
-                let managedContext = appDelegate.persistentContainer.viewContext
-                
-                let fetchedRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest.init(entityName: "Project")
-                
-                if let objectId = project?.objectID
+                let okAction = UIAlertAction(title: "OK", style: .default)
                 {
-                    fetchedRequest.predicate = NSPredicate(format: "name == %@", helper.unwrapString(optionalString: project?.name))
+                    (action:UIAlertAction) in
+                }
+                
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+            }
+            
+            else
+            {
+                if(project != nil)
+                {
+                    let newName = txtField_name.text
+                    let newNotes = txtView_note.text
+                    let newDueDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
+                    let newPriority = helper.segmentIndexToString(segmentIndex: segment_priority.selectedSegmentIndex)
+                    let newAddToCalendar = helper.unwrapBoolean(optionalBool: switch_addToCalendar.isOn)
                     
-                    do
+                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+                    
+                    let managedContext = appDelegate.persistentContainer.viewContext
+                    
+                    let fetchedRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest.init(entityName: "Project")
+                    
+                    if let id = project?.id
                     {
-                        let fetchedObject = try managedContext.fetch(fetchedRequest)
-                        
-                        let objectToUpdate = fetchedObject.first as! NSManagedObject
-                        objectToUpdate.setValue(newName, forKey: "name")
-                        objectToUpdate.setValue(newNotes, forKey: "notes")
-                        objectToUpdate.setValue(newDueDate, forKey: "dueDate")
-                        objectToUpdate.setValue(newPriority, forKey: "priority")
-                        objectToUpdate.setValue(newAddToCalendar, forKey: "addToCalendar")
+                        fetchedRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
                         
                         do
                         {
-                            try managedContext.save()
+                            let fetchedObject = try managedContext.fetch(fetchedRequest)
+                            
+                            let objectToUpdate = fetchedObject.first as! NSManagedObject
+                            objectToUpdate.setValue(newName, forKey: "name")
+                            objectToUpdate.setValue(newNotes, forKey: "notes")
+                            objectToUpdate.setValue(newDueDate, forKey: "dueDate")
+                            objectToUpdate.setValue(newPriority, forKey: "priority")
+                            objectToUpdate.setValue(newAddToCalendar, forKey: "addToCalendar")
+                            
+                            do
+                            {
+                                try managedContext.save()
+                            }
+                                
+                            catch
+                            {
+                                let nserror = error as NSError
+                                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                            }
                         }
-                        
+                            
                         catch
                         {
                             let nserror = error as NSError
@@ -137,27 +165,23 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
                         }
                     }
                     
-                    catch
-                    {
-                        let nserror = error as NSError
-                        fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-                    }
+                }
+                    
+                else
+                {
+                    let newProject = Project(context: context)
+                    newProject.id = UUID.init()
+                    newProject.name = txtField_name.text
+                    newProject.notes = (txtView_note.textColor == UIColor.lightGray) ? "" : txtView_note.text
+                    newProject.priority = priority
+                    newProject.dueDate = formattedDate
+                    newProject.addToCalendar = isAddToCalendar
+                    (UIApplication.shared.delegate as! AppDelegate).saveContext()
                 }
                 
+                dismiss(animated: true, completion: nil)
             }
             
-            else
-            {
-                let newProject = Project(context: context)
-                newProject.name = txtField_name.text
-                newProject.notes = (txtView_note.textColor == UIColor.lightGray) ? "" : txtView_note.text
-                newProject.priority = priority
-                newProject.dueDate = formattedDate
-                newProject.addToCalendar = isAddToCalendar
-                (UIApplication.shared.delegate as! AppDelegate).saveContext()
-            }
-            
-            dismiss(animated: true, completion: nil)
         }
         
     }

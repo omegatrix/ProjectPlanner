@@ -17,46 +17,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var managedObjectContext: NSManagedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var fetchRequest: NSFetchRequest<Task>!
     var tasks: [Task]!
+    var project: Project?
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        configureView()
+ 
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        print("This is the object ID -> \(project?.objectID) \n Type of \(type(of: project?.objectID))")
+        print("This is the ID -> \(project?.id)")
         
-        if project != nil
+        if(project != nil)
         {
             tasks = project?.tasks?.allObjects as! [Task]
         }
     }
-
-    var project: Project?
-    {
-        didSet
-        {
-            // Update the view.
-            configureView()
-        }
-    }
-
-    func configureView()
-    {
-        // Update the user interface for the detail item.
-//        if let detail = detailItem
-//        {
-////            if let label = detailDescriptionLabel
-////            {
-////                label.text = detail.name
-////            }
-//        }
-    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
-        //
         if segue.identifier == "projectSummary"
         {
             if let projectSummary = segue.destination as? ProjectSummaryViewController
@@ -65,7 +44,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
         }
         
-        if segue.identifier == "addEditTaskSegue"
+        if segue.identifier == "addTaskSegue"
         {
             if let addTask = segue.destination as? Add_Edit_TaskViewController
             {
@@ -76,15 +55,13 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func numberOfSections(in tableView: UITableView) -> Int
     {
-        return self.fetchedResultsController.sections?.count ?? 0
+        return 1
         
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        
-        let sectionInfo = self.fetchedResultsController.sections![section] as NSFetchedResultsSectionInfo
-        return sectionInfo.numberOfObjects
+        return tasks?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath)
@@ -116,8 +93,15 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath)
-        self.configureCell(cell,indexPath: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath) as! TaskTableViewCell
+        let task = tasks![indexPath.row]
+        cell.task = task
+        let note = helper.unwrapBoolean(optionalBool: task.notes?.isEmpty) ? "No notes available" : helper.unwrapString(optionalString: task.notes)
+        cell.label_title.text = "\(helper.unwrapString(optionalString: task.name)) - Due on \(helper.dateToString(date: helper.unwrapDate(optionalDate: task.dueDate)))"
+        cell.label_startDate.text = "Start date - \(helper.dateToString(date: helper.unwrapDate(optionalDate: task.startDate)))"
+        cell.label_notify.text = "Notify when due date is passed - \(task.remindWhenDatePassed == true ? "Yes" : "No")"
+        cell.txtView_note.text = note
+        cell.progressBar_task.setProgress(to: Double(task.progress), withAnimation: true)
         return cell
     }
     

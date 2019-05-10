@@ -54,7 +54,7 @@ class ProjectSummaryViewController: UIViewController
         
         else
         {
-            label_title.text = nil
+            label_title.text = "Please select a project to continue!"
             txtView_notes.text = nil
             label_addedToCalendar.text = nil
             progressBar_percentage.hideView()
@@ -65,7 +65,6 @@ class ProjectSummaryViewController: UIViewController
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
-        //
         if segue.identifier == "editProject"
         {
             if(project == nil)
@@ -89,24 +88,5 @@ class ProjectSummaryViewController: UIViewController
                 }
             }
         }
-        
-        //        if segue.identifier == "addAlbum"
-        //        {
-        //            if let addAlbumViewController = segue.destination as? AddAlbumViewController{
-        //                addAlbumViewController.currentArtist = artist
-        //            }
-        //        }
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
