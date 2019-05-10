@@ -35,100 +35,36 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vq1-V5-coA">
-                                <rect key="frame" x="20" y="70" width="948" height="200"/>
+                                <rect key="frame" x="20" y="70" width="951" height="300"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <connections>
                                     <segue destination="kcf-P8-c7x" kind="embed" identifier="projectSummary" id="r9g-Cp-0lq"/>
                                 </connections>
                             </containerView>
-                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="right" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U9h-OM-1yv">
-                                <rect key="frame" x="20" y="270" width="947" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <items>
-                                    <barButtonItem systemItem="add" id="7t4-6x-fNa">
-                                        <connections>
-                                            <segue destination="Dch-3U-0sj" kind="popoverPresentation" identifier="addTaskSegue" popoverAnchorBarButtonItem="7t4-6x-fNa" id="9Ed-nm-gLz">
-                                                <popoverArrowDirection key="popoverArrowDirection" left="YES" right="YES"/>
-                                            </segue>
-                                        </connections>
-                                    </barButtonItem>
-                                </items>
-                            </toolbar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="2IR-j4-Cvb">
-                                <rect key="frame" x="20" y="314" width="951" height="660"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Pdz-A3-0Ky">
+                                <rect key="frame" x="20" y="414" width="951" height="560"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="taskCell" rowHeight="350" id="SKt-Kh-cLE" customClass="TaskTableViewCell" customModule="ProjectPlanner" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="951" height="350"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="taskCell" id="mjz-dV-E8R" customClass="TaskTableViewCell" customModule="ProjectPlanner" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="951" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="SKt-Kh-cLE" id="ShA-Cu-d4y">
-                                            <rect key="frame" x="0.0" y="0.0" width="951" height="349.5"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mjz-dV-E8R" id="yPL-ZK-yeO">
+                                            <rect key="frame" x="0.0" y="0.0" width="951" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="H38-fR-ofv">
-                                                    <rect key="frame" x="15" y="11" width="613" height="329"/>
-                                                    <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Task Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QLQ-AR-1rb">
-                                                            <rect key="frame" x="0.0" y="0.0" width="613" height="31.5"/>
-                                                            <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Dates" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KAt-i0-Ckc">
-                                                            <rect key="frame" x="0.0" y="84.5" width="613" height="20.5"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="R9N-He-7Zr">
-                                                            <rect key="frame" x="0.0" y="157.5" width="613" height="98"/>
-                                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                                        </textView>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notify when due date passed:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xos-jc-OCt">
-                                                            <rect key="frame" x="0.0" y="308.5" width="613" height="20.5"/>
-                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                            <nil key="textColor"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
-                                                    </subviews>
-                                                    <constraints>
-                                                        <constraint firstAttribute="bottom" secondItem="R9N-He-7Zr" secondAttribute="bottom" constant="73.5" id="ce8-7k-nZH"/>
-                                                    </constraints>
-                                                </stackView>
-                                                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mDj-2h-eue" customClass="CircularProgressBar" customModule="ProjectPlanner" customModuleProvider="target">
-                                                    <rect key="frame" x="826" y="11" width="110" height="100"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </view>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v80-sw-EaK">
-                                                    <rect key="frame" x="872" y="309" width="64" height="30"/>
-                                                    <state key="normal" title="Edit"/>
-                                                </button>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="v80-sw-EaK" secondAttribute="bottom" constant="10.5" id="4FF-CW-dB7"/>
-                                                <constraint firstItem="H38-fR-ofv" firstAttribute="top" secondItem="ShA-Cu-d4y" secondAttribute="top" constant="11" id="4R0-Ec-MJd"/>
-                                                <constraint firstAttribute="bottom" secondItem="H38-fR-ofv" secondAttribute="bottom" constant="9.5" id="4vI-wE-EYd"/>
-                                                <constraint firstItem="v80-sw-EaK" firstAttribute="leading" secondItem="ShA-Cu-d4y" secondAttribute="leading" constant="872" id="Hxp-lA-YHw"/>
-                                                <constraint firstItem="H38-fR-ofv" firstAttribute="leading" secondItem="ShA-Cu-d4y" secondAttribute="leading" constant="15" id="ObU-qB-JJd"/>
-                                                <constraint firstAttribute="trailing" secondItem="v80-sw-EaK" secondAttribute="trailing" constant="15" id="XDI-3I-x0P"/>
-                                                <constraint firstItem="v80-sw-EaK" firstAttribute="top" secondItem="ShA-Cu-d4y" secondAttribute="top" constant="309" id="qn2-TG-SE7"/>
-                                                <constraint firstAttribute="trailing" secondItem="H38-fR-ofv" secondAttribute="trailing" constant="323" id="tGG-MB-A9l"/>
-                                            </constraints>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <outlet property="label_notify" destination="xos-jc-OCt" id="X2P-Sj-BCB"/>
-                                            <outlet property="label_startDate" destination="KAt-i0-Ckc" id="xHu-lI-WXp"/>
-                                            <outlet property="label_title" destination="QLQ-AR-1rb" id="s6d-zX-pAG"/>
-                                            <outlet property="progressBar_task" destination="mDj-2h-eue" id="KbI-Z1-fMV"/>
-                                            <outlet property="txtView_note" destination="R9N-He-7Zr" id="XE6-pN-Ate"/>
-                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qz2-6E-brl">
+                                <rect key="frame" x="20" y="370" width="951" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <items>
+                                    <navigationItem title="Title" id="bXe-Be-2Ot">
+                                        <barButtonItem key="rightBarButtonItem" title="Add a new task" id="f66-pv-SHY"/>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="VUw-jc-0yf"/>
@@ -137,7 +73,7 @@
                     <navigationItem key="navigationItem" title="Project Summary &amp; Tasks" id="mOI-FS-AaM"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="tableView" destination="2IR-j4-Cvb" id="ugE-7O-S0w"/>
+                        <outlet property="tableView" destination="Pdz-A3-0Ky" id="ElN-yD-kPI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FJe-Yq-33r" sceneMemberID="firstResponder"/>
@@ -322,87 +258,92 @@
             <objects>
                 <viewController id="kcf-P8-c7x" customClass="ProjectSummaryViewController" customModule="ProjectPlanner" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nl3-qp-Ho3">
-                        <rect key="frame" x="0.0" y="0.0" width="948" height="200"/>
+                        <rect key="frame" x="0.0" y="0.0" width="951" height="300"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CmC-sE-nrU">
-                                <rect key="frame" x="898" y="150" width="30" height="30"/>
-                                <state key="normal" title="Edit"/>
-                                <connections>
-                                    <segue destination="xqQ-gH-pzs" kind="popoverPresentation" identifier="editProject" popoverAnchorView="CmC-sE-nrU" id="diV-Ls-vTR">
-                                        <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                    </segue>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AWH-UL-YFo" customClass="CircularProgressBar" customModule="ProjectPlanner" customModuleProvider="target">
-                                <rect key="frame" x="20" y="20" width="100" height="100"/>
+                                <rect key="frame" x="20" y="60" width="200" height="160"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GFY-sP-dcc" customClass="CircularProgressBar" customModule="ProjectPlanner" customModuleProvider="target">
-                                <rect key="frame" x="828" y="20" width="100" height="100"/>
+                                <rect key="frame" x="732" y="60" width="200" height="160"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zie-vN-RPf">
-                                <rect key="frame" x="20" y="159" width="42" height="20.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Added to calendar - " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zie-vN-RPf">
+                                <rect key="frame" x="20" y="259" width="250" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="250" id="fup-Xz-6Os"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" red="0.02433059885857547" green="0.2767953758389603" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="28" translatesAutoresizingMaskIntoConstraints="NO" id="7fr-Nc-Adq">
-                                <rect key="frame" x="163" y="20" width="622" height="120"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Project name &amp; Priority" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vEZ-FX-3uk">
-                                        <rect key="frame" x="212.5" y="0.0" width="197.5" height="24"/>
-                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vhV-31-OCF">
-                                        <rect key="frame" x="0.0" y="52" width="622" height="68"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                    </textView>
-                                </subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Project name - Priority - Due date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wii-oX-5L2">
+                                <rect key="frame" x="20" y="20" width="911" height="32"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                <color key="textColor" red="0.02433059885857547" green="0.2767953758389603" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NNf-pm-0iH">
+                                <rect key="frame" x="275.5" y="60" width="400" height="118"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="vhV-31-OCF" firstAttribute="leading" secondItem="7fr-Nc-Adq" secondAttribute="leading" id="AzE-IK-Ds4"/>
-                                    <constraint firstItem="vhV-31-OCF" firstAttribute="top" secondItem="vEZ-FX-3uk" secondAttribute="bottom" constant="28" id="f1b-yU-kXh"/>
+                                    <constraint firstAttribute="width" constant="400" id="1nh-iK-LDj"/>
                                 </constraints>
-                            </stackView>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CmC-sE-nrU">
+                                <rect key="frame" x="451" y="230" width="49" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="YdY-ph-K9E"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="Edit" image="edit"/>
+                                <connections>
+                                    <segue destination="xqQ-gH-pzs" kind="popoverPresentation" identifier="editProject" popoverAnchorView="CmC-sE-nrU" id="diV-Ls-vTR">
+                                        <popoverArrowDirection key="popoverArrowDirection" left="YES" right="YES"/>
+                                    </segue>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="CmC-sE-nrU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="zie-vN-RPf" secondAttribute="trailing" constant="8" symbolic="YES" id="3mE-nt-0Tb"/>
-                            <constraint firstItem="7fr-Nc-Adq" firstAttribute="leading" secondItem="AWH-UL-YFo" secondAttribute="trailing" constant="43" id="4S5-eI-gVn"/>
-                            <constraint firstAttribute="bottom" secondItem="AWH-UL-YFo" secondAttribute="bottom" constant="80" id="7Pl-K9-jdQ"/>
-                            <constraint firstItem="7fr-Nc-Adq" firstAttribute="top" secondItem="AWH-UL-YFo" secondAttribute="top" id="8rL-t3-vXr"/>
-                            <constraint firstItem="GFY-sP-dcc" firstAttribute="trailing" secondItem="CmC-sE-nrU" secondAttribute="trailing" id="FMv-WG-s2p"/>
-                            <constraint firstItem="AWH-UL-YFo" firstAttribute="leading" secondItem="zie-vN-RPf" secondAttribute="leading" id="Fsm-3b-HNw"/>
-                            <constraint firstItem="7fr-Nc-Adq" firstAttribute="centerX" secondItem="nl3-qp-Ho3" secondAttribute="centerX" id="HsO-ox-enJ"/>
-                            <constraint firstItem="GFY-sP-dcc" firstAttribute="trailing" secondItem="nl3-qp-Ho3" secondAttribute="trailingMargin" id="Ugx-9Z-ei9"/>
-                            <constraint firstItem="AWH-UL-YFo" firstAttribute="top" secondItem="dqn-sS-p2J" secondAttribute="top" id="aXy-mW-2b5"/>
-                            <constraint firstItem="zie-vN-RPf" firstAttribute="top" secondItem="AWH-UL-YFo" secondAttribute="bottom" constant="39" id="f4U-cm-QbF"/>
-                            <constraint firstItem="dqn-sS-p2J" firstAttribute="bottom" secondItem="7fr-Nc-Adq" secondAttribute="bottom" constant="60" id="j8C-Wj-HuE"/>
-                            <constraint firstItem="GFY-sP-dcc" firstAttribute="leading" secondItem="7fr-Nc-Adq" secondAttribute="trailing" constant="43" id="lUo-ha-d3A"/>
-                            <constraint firstItem="AWH-UL-YFo" firstAttribute="bottom" secondItem="GFY-sP-dcc" secondAttribute="bottom" id="p6g-EW-etu"/>
-                            <constraint firstItem="AWH-UL-YFo" firstAttribute="leading" secondItem="nl3-qp-Ho3" secondAttribute="leadingMargin" id="rKP-AT-5Hh"/>
-                            <constraint firstItem="CmC-sE-nrU" firstAttribute="top" secondItem="GFY-sP-dcc" secondAttribute="bottom" constant="30" id="rpk-D4-VTG"/>
-                            <constraint firstItem="AWH-UL-YFo" firstAttribute="top" secondItem="GFY-sP-dcc" secondAttribute="top" id="vST-MN-y9a"/>
-                            <constraint firstItem="7fr-Nc-Adq" firstAttribute="leading" secondItem="nl3-qp-Ho3" secondAttribute="leading" constant="163" id="yP4-6d-DRN"/>
+                            <constraint firstItem="AWH-UL-YFo" firstAttribute="leading" secondItem="zie-vN-RPf" secondAttribute="leading" id="03K-jX-Fwj"/>
+                            <constraint firstItem="AWH-UL-YFo" firstAttribute="top" secondItem="NNf-pm-0iH" secondAttribute="top" id="90w-ex-g0s"/>
+                            <constraint firstItem="AWH-UL-YFo" firstAttribute="bottom" secondItem="GFY-sP-dcc" secondAttribute="bottom" id="DxV-EU-Ogx"/>
+                            <constraint firstItem="Wii-oX-5L2" firstAttribute="top" secondItem="dqn-sS-p2J" secondAttribute="top" id="Lh3-Xx-1ZF"/>
+                            <constraint firstItem="Wii-oX-5L2" firstAttribute="trailing" secondItem="nl3-qp-Ho3" secondAttribute="trailingMargin" id="Mls-Oy-QLR"/>
+                            <constraint firstItem="AWH-UL-YFo" firstAttribute="leading" secondItem="Wii-oX-5L2" secondAttribute="leading" id="Mvd-l7-xaw"/>
+                            <constraint firstItem="zie-vN-RPf" firstAttribute="bottom" secondItem="CmC-sE-nrU" secondAttribute="bottom" id="RA9-Qi-uEz"/>
+                            <constraint firstItem="Wii-oX-5L2" firstAttribute="leading" secondItem="nl3-qp-Ho3" secondAttribute="leadingMargin" id="SNS-qf-JCf"/>
+                            <constraint firstItem="NNf-pm-0iH" firstAttribute="leading" secondItem="AWH-UL-YFo" secondAttribute="trailing" constant="56" id="SRO-T3-FBh"/>
+                            <constraint firstItem="NNf-pm-0iH" firstAttribute="top" secondItem="GFY-sP-dcc" secondAttribute="top" id="TJi-4F-iTO"/>
+                            <constraint firstItem="zie-vN-RPf" firstAttribute="top" secondItem="AWH-UL-YFo" secondAttribute="bottom" constant="39" id="VnM-3K-y0X"/>
+                            <constraint firstItem="NNf-pm-0iH" firstAttribute="centerX" secondItem="CmC-sE-nrU" secondAttribute="centerX" id="dlf-PQ-p5e"/>
+                            <constraint firstItem="Wii-oX-5L2" firstAttribute="centerX" secondItem="NNf-pm-0iH" secondAttribute="centerX" id="exo-JC-fhT"/>
+                            <constraint firstItem="dqn-sS-p2J" firstAttribute="trailing" secondItem="GFY-sP-dcc" secondAttribute="trailing" constant="19" id="gOo-UH-FTG"/>
+                            <constraint firstItem="GFY-sP-dcc" firstAttribute="leading" secondItem="NNf-pm-0iH" secondAttribute="trailing" constant="56" id="gqH-Tp-bV6"/>
+                            <constraint firstItem="CmC-sE-nrU" firstAttribute="top" secondItem="NNf-pm-0iH" secondAttribute="bottom" constant="52" id="tAT-eJ-7XI"/>
+                            <constraint firstItem="dqn-sS-p2J" firstAttribute="trailing" secondItem="CmC-sE-nrU" secondAttribute="trailing" constant="451" id="uKJ-OV-tLL"/>
+                            <constraint firstAttribute="bottom" secondItem="zie-vN-RPf" secondAttribute="bottom" constant="20" symbolic="YES" id="wQV-ZT-bco"/>
+                            <constraint firstItem="AWH-UL-YFo" firstAttribute="top" secondItem="Wii-oX-5L2" secondAttribute="bottom" constant="8" symbolic="YES" id="z97-MU-zRm"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="dqn-sS-p2J"/>
                     </view>
+                    <value key="contentSizeForViewInPopover" type="size" width="951" height="300"/>
                     <connections>
+                        <outlet property="btn_edit" destination="CmC-sE-nrU" id="sfh-Ag-8ah"/>
                         <outlet property="label_addedToCalendar" destination="zie-vN-RPf" id="QOY-b6-Kb3"/>
-                        <outlet property="label_title" destination="vEZ-FX-3uk" id="Nd5-fn-r0Z"/>
+                        <outlet property="label_title" destination="Wii-oX-5L2" id="0lG-XS-bi0"/>
                         <outlet property="progressBar_daysRemaining" destination="GFY-sP-dcc" id="2U4-rh-yII"/>
                         <outlet property="progressBar_percentage" destination="AWH-UL-YFo" id="R7R-Ka-tht"/>
-                        <outlet property="txtView_notes" destination="vhV-31-OCF" id="oTS-JU-shE"/>
+                        <outlet property="txtView_notes" destination="NNf-pm-0iH" id="n9a-WM-ROb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MRO-D0-hob" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1488.28125" y="124.21875"/>
+            <point key="canvasLocation" x="1487.9209370424596" y="124.21874999999999"/>
         </scene>
         <!--Add Edit Task View Controller-->
         <scene sceneID="KSb-qU-iZN">
@@ -536,6 +477,9 @@
             <point key="canvasLocation" x="-45" y="129"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="edit" width="48" height="48"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Tll-UG-LXB"/>
         <segue reference="diV-Ls-vTR"/>

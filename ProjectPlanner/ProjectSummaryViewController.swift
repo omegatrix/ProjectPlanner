@@ -24,6 +24,7 @@ class ProjectSummaryViewController: UIViewController
     @IBOutlet weak var label_title: UILabel!
     @IBOutlet weak var txtView_notes: UITextView!
     @IBOutlet weak var label_addedToCalendar: UILabel!
+    @IBOutlet weak var btn_edit: UIButton!
     
     override func viewDidLoad()
     {
@@ -37,7 +38,7 @@ class ProjectSummaryViewController: UIViewController
             
             let addedToCalendar = "Added to calendar: \(helper.unwrapBoolean(optionalBool: project?.addToCalendar) ? "Yes" : "No")"
             let notes = helper.unwrapBoolean(optionalBool: project?.notes?.isEmpty) ? "No notes available!" : helper.unwrapString(optionalString: project?.notes)
-            label_title.text = "\(helper.unwrapString(optionalString: project?.name)) - \(helper.unwrapString(optionalString: project?.priority)) Priority"
+            label_title.text = "\(helper.unwrapString(optionalString: project?.name)) - \(helper.unwrapString(optionalString: project?.priority)) Priority - Due on \(helper.dateToString(date: helper.unwrapDate(optionalDate: project?.dueDate)))"
             txtView_notes.text = notes
             label_addedToCalendar.text = addedToCalendar
             
@@ -50,6 +51,8 @@ class ProjectSummaryViewController: UIViewController
             progressBar_daysRemaining.safePercent = 100
             progressBar_daysRemaining.setProgress(to: 20, withAnimation: true)
             progressBar_daysRemaining.lineWidth = 20
+            
+            btn_edit.isHidden = false
         }
         
         else
@@ -59,6 +62,7 @@ class ProjectSummaryViewController: UIViewController
             label_addedToCalendar.text = nil
             progressBar_percentage.hideView()
             progressBar_daysRemaining.hideView()
+            btn_edit.isHidden = true
         }
         
     }

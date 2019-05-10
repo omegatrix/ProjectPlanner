@@ -8,11 +8,13 @@
 
 import UIKit
 import CoreData
+import EventKit
 
 class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
 {
     var project: Project?
-
+    var isCalendarPermissionGranted = false
+    
     @IBOutlet weak var txtField_name: UITextField!
     @IBOutlet weak var txtView_note: UITextView!
     @IBOutlet weak var segment_priority: UISegmentedControl!
@@ -21,12 +23,14 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
     @IBOutlet weak var btn_submit: UIButton!
     
     let helper = Helper()
-    
+    let eventStore = EKEventStore()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        
+        isCalendarPermissionGranted = checkCalendarPermission()
         
         //delegate
         txtView_note.delegate = self
@@ -56,7 +60,7 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
     
     
     /*
-        The following two methods: textViewDidBeginEditing and textViewDidEndEditing are adapted from the StackOverflow thread https://stackoverflow.com/questions/27652227/text-view-uitextview-placeholder-swift
+        The following two methods: textViewDidBeginEditing and textViewDidEndEditing are adopted from the StackOverflow thread https://stackoverflow.com/questions/27652227/text-view-uitextview-placeholder-swift
      */
     
     func textViewDidBeginEditing(_ textView: UITextView)
@@ -82,6 +86,9 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
     {
         let isProjectNameEmpty = txtField_name.text?.isEmpty ?? true
         let isAddToCalendar = switch_addToCalendar.isOn
+        let today = helper.unwrapDate(optionalDate: Date())
+        let formattedDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
+        var calendarEventId = ""
 
         if(isProjectNameEmpty)
         {
@@ -94,96 +101,105 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
             
             alertController.addAction(okAction)
             self.present(alertController, animated: true, completion: nil)
+            
+            return
+        }
+            
+        if(formattedDate < today)
+        {
+            let alertController = UIAlertController(title: "Alert", message: "Due date cannot be in the past!", preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: "OK", style: .default)
+            {
+                (action:UIAlertAction) in
+            }
+            
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            
+            return
         }
         
+        if(project != nil)
+        {
+            updateProject(project: project!)
+        }
+            
         else
         {
-            let priority = helper.segmentIndexToString(segmentIndex: segment_priority.selectedSegmentIndex)
-            let today = helper.unwrapDate(optionalDate: Date())
-            let formattedDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
-            
-            if(formattedDate < today)
-            {
-                let alertController = UIAlertController(title: "Alert", message: "Due date cannot be in the past!", preferredStyle: .alert)
-                
-                let okAction = UIAlertAction(title: "OK", style: .default)
-                {
-                    (action:UIAlertAction) in
-                }
-                
-                alertController.addAction(okAction)
-                self.present(alertController, animated: true, completion: nil)
-            }
-            
-            else
-            {
-                if(project != nil)
-                {
-                    let newName = txtField_name.text
-                    let newNotes = txtView_note.text
-                    let newDueDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
-                    let newPriority = helper.segmentIndexToString(segmentIndex: segment_priority.selectedSegmentIndex)
-                    let newAddToCalendar = helper.unwrapBoolean(optionalBool: switch_addToCalendar.isOn)
-                    
-                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-                    
-                    let managedContext = appDelegate.persistentContainer.viewContext
-                    
-                    let fetchedRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest.init(entityName: "Project")
-                    
-                    if let id = project?.id
-                    {
-                        fetchedRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
-                        
-                        do
-                        {
-                            let fetchedObject = try managedContext.fetch(fetchedRequest)
-                            
-                            let objectToUpdate = fetchedObject.first as! NSManagedObject
-                            objectToUpdate.setValue(newName, forKey: "name")
-                            objectToUpdate.setValue(newNotes, forKey: "notes")
-                            objectToUpdate.setValue(newDueDate, forKey: "dueDate")
-                            objectToUpdate.setValue(newPriority, forKey: "priority")
-                            objectToUpdate.setValue(newAddToCalendar, forKey: "addToCalendar")
-                            
-                            do
-                            {
-                                try managedContext.save()
-                            }
-                                
-                            catch
-                            {
-                                let nserror = error as NSError
-                                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-                            }
-                        }
-                            
-                        catch
-                        {
-                            let nserror = error as NSError
-                            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-                        }
-                    }
-                    
-                }
-                    
-                else
-                {
-                    let newProject = Project(context: context)
-                    newProject.id = UUID.init()
-                    newProject.name = txtField_name.text
-                    newProject.notes = (txtView_note.textColor == UIColor.lightGray) ? "" : txtView_note.text
-                    newProject.priority = priority
-                    newProject.dueDate = formattedDate
-                    newProject.addToCalendar = isAddToCalendar
-                    (UIApplication.shared.delegate as! AppDelegate).saveContext()
-                }
-                
-                dismiss(animated: true, completion: nil)
-            }
-            
+            saveProject()
         }
+    }
+    
+    func saveProject()
+    {
+        let priority = helper.segmentIndexToString(segmentIndex: segment_priority.selectedSegmentIndex)
+        let dueDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
+        let addToCalendar = helper.unwrapBoolean(optionalBool: switch_addToCalendar.isOn)
         
+        let newProject = Project(context: context)
+        newProject.id = UUID.init()
+        newProject.name = txtField_name.text
+        newProject.notes = (txtView_note.textColor == UIColor.lightGray) ? "" : txtView_note.text
+        newProject.priority = priority
+        newProject.dueDate = dueDate
+        newProject.addToCalendar = addToCalendar
+        
+        let calendarEventId = addToCalendar ? addCalendarEvent(currentProject: newProject) : ""
+        newProject.calendarEventId = calendarEventId
+        
+        (UIApplication.shared.delegate as! AppDelegate).saveContext()
+        
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func updateProject(project: Project)
+    {
+        let newName = txtField_name.text
+        let newNotes = txtView_note.text
+        let newDueDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
+        let newPriority = helper.segmentIndexToString(segmentIndex: segment_priority.selectedSegmentIndex)
+        let newAddToCalendar = helper.unwrapBoolean(optionalBool: switch_addToCalendar.isOn)
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        let managedContext = appDelegate.persistentContainer.viewContext
+        
+        let fetchedRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest.init(entityName: "Project")
+        
+        if let id = project.id
+        {
+            fetchedRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+            
+            do
+            {
+                let fetchedObject = try managedContext.fetch(fetchedRequest)
+                
+                let objectToUpdate = fetchedObject.first as! NSManagedObject
+                objectToUpdate.setValue(newName, forKey: "name")
+                objectToUpdate.setValue(newNotes, forKey: "notes")
+                objectToUpdate.setValue(newDueDate, forKey: "dueDate")
+                objectToUpdate.setValue(newPriority, forKey: "priority")
+                objectToUpdate.setValue(newAddToCalendar, forKey: "addToCalendar")
+                
+                do
+                {
+                    try managedContext.save()
+                }
+                    
+                catch
+                {
+                    let nserror = error as NSError
+                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                }
+            }
+                
+            catch
+            {
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
     }
     
     @IBAction func cancelView(_ sender: UIButton)
@@ -197,20 +213,154 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         self.txtView_note.textColor = UIColor.lightGray
     }
     
+    func checkCalendarPermission() -> Bool
+    {
+        print("checking permission \n")
+        
+        var status = false
+        
+        switch EKEventStore.authorizationStatus(for: .event)
+        {
+            case .authorized:
+                status = true
+            break
+            
+            case .notDetermined:
+                status = askCalendarPermission()
+            break
+            
+            default:
+                print("Default case!")
+        }
+        
+        return status
+    }
     
-    
-    
-    
-    
+    func askCalendarPermission() -> Bool
+    {
+        var isPermissionGranted = false
+        eventStore.requestAccess(to: .event, completion:
+            {
+                (granted: Bool, error: Error?) -> Void in
+                if granted
+                {
+                    isPermissionGranted = true
+                }
+            }
+        )
+        
+        return isPermissionGranted
+    }
     
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
+     The following function is adopted from https://www.ioscreator.com/tutorials/add-event-calendar-ios-tutorial
     */
-
+    func addCalendarEvent(currentProject: Project) -> String
+    {
+        print("add project to calendar \n")
+        let event = EKEvent(eventStore: eventStore)
+    
+        let calendars = eventStore.calendars(for: .event)
+        var isCalendarExist = false
+        var projectCalendar: EKCalendar? = nil
+        
+        for cal in calendars
+        {
+            if(cal.title == "Project Planner")
+            {
+                isCalendarExist = true
+                projectCalendar = cal
+                print("calendar found \(cal.title)\n")
+            }
+        }
+        
+        if(!isCalendarExist)
+        {
+            projectCalendar = createProjectCalendar()
+            print("calendar created \(projectCalendar?.title) \n")
+        }
+        
+        event.calendar = projectCalendar
+        event.title = currentProject.name
+        event.startDate = currentProject.dueDate
+        event.endDate = currentProject.dueDate
+        event.isAllDay = true
+        event.notes = currentProject.notes
+        
+        print("start date \(currentProject.dueDate) \n")
+        
+        do
+        {
+            try eventStore.save(event, span: .thisEvent)
+        }
+        
+        catch
+        {
+            let alertController = UIAlertController(title: "Alert", message: "An error occurred while adding the project to the calendar!", preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: "OK", style: .default)
+            {
+                (action:UIAlertAction) in
+            }
+            
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            
+            let nserror = error as NSError
+            print("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+        
+        print("eventIdentifier \(event.eventIdentifier)")
+        return event.eventIdentifier
+    }
+    
+    /*
+     The following function is adopted from https://www.andrewcbancroft.com/2015/06/17/creating-calendars-with-event-kit-and-swift/
+    */
+    func createProjectCalendar() -> EKCalendar
+    {
+        let newCalendar = EKCalendar(for: .event, eventStore: eventStore)
+        
+        newCalendar.title = "Project Planner"
+        
+        let sourcesInEventStore = eventStore.sources
+        
+        newCalendar.source = sourcesInEventStore.filter
+            {
+                (source: EKSource) -> Bool in source.sourceType.rawValue == EKSourceType.local.rawValue
+            }.first!
+        
+        do
+        {
+            try eventStore.saveCalendar(newCalendar, commit: true)
+        }
+        
+        catch
+        {
+            let alertController = UIAlertController(title: "Alert", message: "An error occurred while creating the calendar!", preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: "OK", style: .default)
+            {
+                (action:UIAlertAction) in
+            }
+            
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            
+            let nserror = error as NSError
+            print("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+        
+        return newCalendar
+    }
+    
+    func updateCalendarEvent()
+    {
+        //to do
+    }
+    
+    func deleteCalendarEvent()
+    {
+        //to do
+    }
 }

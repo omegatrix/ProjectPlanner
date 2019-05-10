@@ -11,11 +11,11 @@ import UIKit
 class TaskTableViewCell: UITableViewCell
 {
 
-    @IBOutlet weak var txtView_note: UITextView!
-    @IBOutlet weak var label_notify: UILabel!
-    @IBOutlet weak var label_startDate: UILabel!
-    @IBOutlet weak var label_title: UILabel!
-    @IBOutlet weak var progressBar_task: CircularProgressBar!
+//    @IBOutlet weak var txtView_note: UITextView!
+//    @IBOutlet weak var label_notify: UILabel!
+//    @IBOutlet weak var label_startDate: UILabel!
+//    @IBOutlet weak var label_title: UILabel!
+//    @IBOutlet weak var progressBar_task: CircularProgressBar!
     
     var task: Task?
     

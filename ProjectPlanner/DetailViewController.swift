@@ -96,12 +96,12 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let cell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath) as! TaskTableViewCell
         let task = tasks![indexPath.row]
         cell.task = task
-        let note = helper.unwrapBoolean(optionalBool: task.notes?.isEmpty) ? "No notes available" : helper.unwrapString(optionalString: task.notes)
-        cell.label_title.text = "\(helper.unwrapString(optionalString: task.name)) - Due on \(helper.dateToString(date: helper.unwrapDate(optionalDate: task.dueDate)))"
-        cell.label_startDate.text = "Start date - \(helper.dateToString(date: helper.unwrapDate(optionalDate: task.startDate)))"
-        cell.label_notify.text = "Notify when due date is passed - \(task.remindWhenDatePassed == true ? "Yes" : "No")"
-        cell.txtView_note.text = note
-        cell.progressBar_task.setProgress(to: Double(task.progress), withAnimation: true)
+//        let note = helper.unwrapBoolean(optionalBool: task.notes?.isEmpty) ? "No notes available" : helper.unwrapString(optionalString: task.notes)
+//        cell.label_title.text = "\(helper.unwrapString(optionalString: task.name)) - Due on \(helper.dateToString(date: helper.unwrapDate(optionalDate: task.dueDate)))"
+//        cell.label_startDate.text = "Start date - \(helper.dateToString(date: helper.unwrapDate(optionalDate: task.startDate)))"
+//        cell.label_notify.text = "Notify when due date is passed - \(task.remindWhenDatePassed == true ? "Yes" : "No")"
+//        cell.txtView_note.text = note
+//        cell.progressBar_task.setProgress(to: Double(task.progress), withAnimation: true)
         return cell
     }
     
