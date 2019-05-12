@@ -104,6 +104,10 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
     @IBAction func onButtonPress(_ sender: UIButton)
     {
         let isTaskNameEmpty = helper.unwrapBoolean(optionalBool: txtField_name.text?.isEmpty)
+        let today = helper.unwrapDate(optionalDate: Date())
+        let dueDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
+        let startDate = helper.unwrapDate(optionalDate: datePicker_startDate.date)
+        let projectDueDate = helper.unwrapDate(optionalDate: currentProject?.dueDate)
         
         if isTaskNameEmpty
         {
@@ -116,101 +120,107 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
             
             alertController.addAction(okAction)
             self.present(alertController, animated: true, completion: nil)
+            return
+        }
+            
+        if(dueDate < today || startDate > dueDate)
+        {
+            let errorMessage = dueDate < today ? "Due date cannot be in the past!" : "Start date cannot occur after due date!"
+            let alertController = UIAlertController(title: "Alert", message: errorMessage, preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: "OK", style: .default)
+            {
+                (action:UIAlertAction) in
+            }
+            
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            return
+        }
+            
+        if(dueDate > projectDueDate)
+        {
+            let alertController = UIAlertController(title: "Alert", message: "Task due date cannot occur after Project due date!", preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: "OK", style: .default)
+            {
+                (action:UIAlertAction) in
+            }
+            
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            return
+        }
+            
+        if(task != nil)
+        {
+            let newName = txtField_name.text
+            let newNotes = (txtView_note.textColor == UIColor.lightGray) ? "" : txtView_note.text
+            let newDueDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
+            let newStartDate = helper.unwrapDate(optionalDate: datePicker_startDate.date)
+            let newProgress = Int16(slider_progress.value)
+            let newNotify = switch_reminder.isOn
+            
+            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+            
+            let managedContext = appDelegate.persistentContainer.viewContext
+            
+            let fetchedRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest.init(entityName: "Task")
+            
+            if let id = task?.id
+            {
+                fetchedRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+                
+                do
+                {
+                    let fetchedObject = try managedContext.fetch(fetchedRequest)
+                    
+                    let objectToUpdate = fetchedObject.first as! NSManagedObject
+                    objectToUpdate.setValue(newName, forKey: "name")
+                    objectToUpdate.setValue(newNotes, forKey: "notes")
+                    objectToUpdate.setValue(newStartDate, forKey: "startDate")
+                    objectToUpdate.setValue(newDueDate, forKey: "dueDate")
+                    objectToUpdate.setValue(newProgress, forKey: "progress")
+                    objectToUpdate.setValue(newNotify, forKey: "remindWhenDatePassed")
+                    
+                    do
+                    {
+                        try managedContext.save()
+                    }
+                        
+                    catch
+                    {
+                        let nserror = error as NSError
+                        fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                    }
+                }
+                    
+                catch
+                {
+                    let nserror = error as NSError
+                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                }
+            }
         }
         
         else
         {
-            let today = helper.unwrapDate(optionalDate: Date())
-            let dueDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
-            let startDate = helper.unwrapDate(optionalDate: datePicker_startDate.date)
-            
-            if(dueDate < today || startDate > dueDate)
+            if currentProject != nil
             {
-                let errorMessage = dueDate < today ? "Due date cannot be in the past!" : "Start date cannot occur after due date!"
-                let alertController = UIAlertController(title: "Alert", message: errorMessage, preferredStyle: .alert)
+                let newTask = Task(context: context)
+                newTask.id = UUID.init()
+                newTask.name = txtField_name.text
+                newTask.notes = (txtView_note.textColor == UIColor.lightGray) ? "" : txtView_note.text
+                newTask.dueDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
+                newTask.startDate = helper.unwrapDate(optionalDate: datePicker_startDate.date)
+                newTask.progress = Int16(slider_progress.value)
+                newTask.remindWhenDatePassed = switch_reminder.isOn
                 
-                let okAction = UIAlertAction(title: "OK", style: .default)
-                {
-                    (action:UIAlertAction) in
-                }
-                
-                alertController.addAction(okAction)
-                self.present(alertController, animated: true, completion: nil)
-            }
-            
-            else
-            {
-                if(task != nil)
-                {
-                    let newName = txtField_name.text
-                    let newNotes = (txtView_note.textColor == UIColor.lightGray) ? "" : txtView_note.text
-                    let newDueDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
-                    let newStartDate = helper.unwrapDate(optionalDate: datePicker_startDate.date)
-                    let newProgress = Int16(slider_progress.value)
-                    let newNotify = switch_reminder.isOn
-                    
-                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-                    
-                    let managedContext = appDelegate.persistentContainer.viewContext
-                    
-                    let fetchedRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest.init(entityName: "Task")
-                    
-                    if let id = task?.id
-                    {
-                        fetchedRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
-                        
-                        do
-                        {
-                            let fetchedObject = try managedContext.fetch(fetchedRequest)
-                            
-                            let objectToUpdate = fetchedObject.first as! NSManagedObject
-                            objectToUpdate.setValue(newName, forKey: "name")
-                            objectToUpdate.setValue(newNotes, forKey: "notes")
-                            objectToUpdate.setValue(newStartDate, forKey: "startDate")
-                            objectToUpdate.setValue(newDueDate, forKey: "dueDate")
-                            objectToUpdate.setValue(newProgress, forKey: "progress")
-                            objectToUpdate.setValue(newNotify, forKey: "remindWhenDatePassed")
-                            
-                            do
-                            {
-                                try managedContext.save()
-                            }
-                                
-                            catch
-                            {
-                                let nserror = error as NSError
-                                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-                            }
-                        }
-                            
-                        catch
-                        {
-                            let nserror = error as NSError
-                            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-                        }
-                    }
-                }
-                    
-                else
-                {
-                    if currentProject != nil
-                    {
-                        let newTask = Task(context: context)
-                        newTask.id = UUID.init()
-                        newTask.name = txtField_name.text
-                        newTask.notes = (txtView_note.textColor == UIColor.lightGray) ? "" : txtView_note.text
-                        newTask.dueDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
-                        newTask.startDate = helper.unwrapDate(optionalDate: datePicker_startDate.date)
-                        newTask.progress = Int16(slider_progress.value)
-                        newTask.remindWhenDatePassed = switch_reminder.isOn
-                        
-                        currentProject?.addToTasks(newTask)
-                        (UIApplication.shared.delegate as! AppDelegate).saveContext()
-                    }
-                }
-                
-                dismiss(animated: true, completion: nil)
+                currentProject?.addToTasks(newTask)
+                (UIApplication.shared.delegate as! AppDelegate).saveContext()
             }
         }
+        
+        dismiss(animated: true, completion: nil)
     }
 }

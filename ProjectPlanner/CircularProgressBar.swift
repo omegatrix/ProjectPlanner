@@ -53,7 +53,7 @@ class CircularProgressBar: UIView
         }
     }
     
-    public func setProgress(to progressConstant: Double, withAnimation: Bool)
+    public func setProgress(to progressConstant: Double, withAnimation: Bool, daysRemain: Bool)
     {
         
         var progress: Double
@@ -88,9 +88,8 @@ class CircularProgressBar: UIView
             else
             {
                 currentTime += 0.05
-                let percent = currentTime/2 * 100
-                //self.label.text = "\(Int(progress * percent))"
-                self.label.text = "\(Int(progress * percent))"
+                let percent = currentTime/2
+                self.label.text = daysRemain ? "\(Int(progress * percent)) Days Left" : "\(Int(progress * percent)) % Complete"
                 self.setForegroundLayerColorForSafePercent()
                 self.configLabel()
             }
@@ -182,15 +181,15 @@ class CircularProgressBar: UIView
     
     private func setForegroundLayerColorForSafePercent()
     {
-        if Int(label.text!)! >= self.safePercent
-        {
-            self.foregroundLayer.strokeColor = UIColor.green.cgColor
-        }
-        
-        else
-        {
-            self.foregroundLayer.strokeColor = UIColor.red.cgColor
-        }
+//        if Int(label.text!)! >= self.safePercent
+//        {
+//            self.foregroundLayer.strokeColor = UIColor.green.cgColor
+//        }
+//
+//        else
+//        {
+//            self.foregroundLayer.strokeColor = UIColor.red.cgColor
+//        }
     }
     
     private func setupView()

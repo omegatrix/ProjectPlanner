@@ -15,6 +15,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     var detailViewController: DetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
     let helper = Helper()
+    let calendarHelper = CalendarHelper()
 
 
     override func viewDidLoad()
@@ -110,11 +111,19 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         if editingStyle == .delete
         {
             let context = fetchedResultsController.managedObjectContext
-            context.delete(fetchedResultsController.object(at: indexPath))
+            let objectToDelete = fetchedResultsController.object(at: indexPath) as Project
+            let eventIdentifier = helper.unwrapString(optionalString: objectToDelete.calendarEventId)
+            let hasEvent = !helper.unwrapBoolean(optionalBool: eventIdentifier.isEmpty)
+            context.delete(objectToDelete)
                 
             do
             {
                 try context.save()
+                
+                if(hasEvent)
+                {
+                    calendarHelper.deleteCalendarEvent(calendarEventId: eventIdentifier)
+                }
             }
             
             catch

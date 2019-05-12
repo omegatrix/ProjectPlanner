@@ -23,14 +23,16 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
     @IBOutlet weak var btn_submit: UIButton!
     
     let helper = Helper()
-    let eventStore = EKEventStore()
+    let calendarHelper = CalendarHelper()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
         
-        isCalendarPermissionGranted = checkCalendarPermission()
+        calendarHelper.checkCalendarPermission()
+        
+        print("permission granted in project view controller \(isCalendarPermissionGranted)")
         
         //delegate
         txtView_note.delegate = self
@@ -48,6 +50,8 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
             datePicker_dueDate.date = helper.unwrapDate(optionalDate: project?.dueDate)
             switch_addToCalendar.isOn = helper.unwrapBoolean(optionalBool: project?.addToCalendar)
             btn_submit.setTitle("Update", for: .normal)
+            
+            print("edit project, event id \(project?.calendarEventId)")
         }
         
         else
@@ -82,12 +86,14 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         }
     }
     
+    
     @IBAction func onButtonPress(_ sender: UIButton)
     {
         let isProjectNameEmpty = txtField_name.text?.isEmpty ?? true
         let isAddToCalendar = switch_addToCalendar.isOn
         let today = helper.unwrapDate(optionalDate: Date())
         let formattedDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
+        let calendarPermissionGranted = calendarHelper.checkCalendarPermission()
         var calendarEventId = ""
 
         if(isProjectNameEmpty)
@@ -120,6 +126,35 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
             return
         }
         
+        if(isAddToCalendar && !calendarPermissionGranted)
+        {
+//            let alertController = UIAlertController(title: "Alert", message: "Please grant calendar permission in settings", preferredStyle: .alert)
+//            let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) -> Void in
+//                guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+//                    return
+//                }
+//                if UIApplication.shared.canOpenURL(settingsUrl) {
+//                    UIApplication.shared.open(settingsUrl, completionHandler: {(success) in self.isCalendarPermissionGranted = success})
+//                }
+//            }
+//            let cancelAction = UIAlertAction(title: "Cancel", style: .destructive, handler: nil)
+//            alertController.addAction(cancelAction)
+//            alertController.addAction(settingsAction)
+//            self.present(alertController, animated: true, completion: nil)
+
+            let alertController = UIAlertController(title: "Alert", message: "Please grant calendar permission in settings to proceed!", preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: "OK", style: .default)
+            {
+                (action:UIAlertAction) in
+            }
+            
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            
+            return
+        }
+        
         if(project != nil)
         {
             updateProject(project: project!)
@@ -136,6 +171,7 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         let priority = helper.segmentIndexToString(segmentIndex: segment_priority.selectedSegmentIndex)
         let dueDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
         let addToCalendar = helper.unwrapBoolean(optionalBool: switch_addToCalendar.isOn)
+        var calendarEventId = ""
         
         let newProject = Project(context: context)
         newProject.id = UUID.init()
@@ -145,11 +181,29 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         newProject.dueDate = dueDate
         newProject.addToCalendar = addToCalendar
         
-        let calendarEventId = addToCalendar ? addCalendarEvent(currentProject: newProject) : ""
+        if(addToCalendar)
+        {
+            calendarEventId = calendarHelper.addCalendarEvent(currentProject: newProject)
+            print("event id in project controller \(calendarEventId)" )
+                
+            if(calendarEventId.isEmpty)
+            {
+                let alertController = UIAlertController(title: "Alert", message: "An error occurred while adding project to calendar!", preferredStyle: .alert)
+                    
+                let okAction = UIAlertAction(title: "OK", style: .default)
+                {
+                        (action:UIAlertAction) in
+                }
+                    
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+                return
+            }
+        }
+        
         newProject.calendarEventId = calendarEventId
         
         (UIApplication.shared.delegate as! AppDelegate).saveContext()
-        
         dismiss(animated: true, completion: nil)
     }
     
@@ -160,11 +214,56 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         let newDueDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
         let newPriority = helper.segmentIndexToString(segmentIndex: segment_priority.selectedSegmentIndex)
         let newAddToCalendar = helper.unwrapBoolean(optionalBool: switch_addToCalendar.isOn)
+        var calendarEventId = ""
+        var taskDueDateInFuture = false
+        let tasks = project.tasks?.allObjects as! [Task]
+        
+        let oldName = project.name
+        let oldNotes = project.notes
+        let oldDueDate = project.dueDate
+        let oldPriority = project.priority
+        let oldAddToCalendar = project.addToCalendar
+        let oldEventIdentifier = project.calendarEventId
+        
+        print("old calendar id \(oldEventIdentifier)")
+        
+        if(newName == oldName
+            && newNotes == oldNotes
+            && newDueDate == oldDueDate
+            && newPriority == oldPriority
+            && newAddToCalendar == oldAddToCalendar)
+        {
+            let alertController = UIAlertController(title: "Alert", message: "No changes made!", preferredStyle: .alert)
+            
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: {action in
+                self.dismiss(animated: true, completion: nil)
+            })
+            
+            alertController.addAction(okAction)
+            self.present(alertController, animated: true, completion: nil)
+            return
+        }
+        
+        for eachTask in tasks
+        {
+            print("task due date \(eachTask.dueDate)")
+            if(helper.unwrapDate(optionalDate: eachTask.dueDate) > newDueDate)
+            {
+                let alertController = UIAlertController(title: "Alert", message: "One of the tasks' due date occurs after the picked due date!", preferredStyle: .alert)
+                
+                let okAction = UIAlertAction(title: "OK", style: .default)
+                {
+                    (action:UIAlertAction) in
+                }
+                
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+                return
+            }
+        }
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        
         let managedContext = appDelegate.persistentContainer.viewContext
-        
         let fetchedRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest.init(entityName: "Project")
         
         if let id = project.id
@@ -181,6 +280,43 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
                 objectToUpdate.setValue(newDueDate, forKey: "dueDate")
                 objectToUpdate.setValue(newPriority, forKey: "priority")
                 objectToUpdate.setValue(newAddToCalendar, forKey: "addToCalendar")
+                
+                if(oldAddToCalendar && newAddToCalendar) //the event needs to be updated in the calendar
+                {
+                    calendarHelper.updateCalendarEvent(projectToUpdate: objectToUpdate as! Project)
+                    calendarEventId = helper.unwrapString(optionalString: oldEventIdentifier) //keep the same eventId
+                }
+                
+                if(!oldAddToCalendar && newAddToCalendar) //a new event needs to be added to the calendar
+                {
+                    
+                    calendarEventId = calendarHelper.addCalendarEvent(currentProject: objectToUpdate as! Project) //new eventId
+                    print("event id in project controller \(calendarEventId)" )
+                    
+                    if(calendarEventId.isEmpty)
+                    {
+                        let alertController = UIAlertController(title: "Alert", message: "An error occurred while adding project to calendar!", preferredStyle: .alert)
+                        
+                        let okAction = UIAlertAction(title: "OK", style: .default)
+                        {
+                            (action:UIAlertAction) in
+                        }
+                        
+                        alertController.addAction(okAction)
+                        self.present(alertController, animated: true, completion: nil)
+                        return
+                    }
+                }
+                
+                if(oldAddToCalendar && !newAddToCalendar) //event needs to be deleted from the calendar events
+                {
+                    if let oldEventIdentifier = oldEventIdentifier
+                    {
+                        calendarHelper.deleteCalendarEvent(calendarEventId: oldEventIdentifier)
+                    }
+                }
+                
+                objectToUpdate.setValue(calendarEventId, forKey: "calendarEventId") //set the eventId to be updated
                 
                 do
                 {
@@ -200,6 +336,8 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
+        
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func cancelView(_ sender: UIButton)
@@ -211,156 +349,5 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
     {
         self.txtView_note.text = "Please enter any notes here..."
         self.txtView_note.textColor = UIColor.lightGray
-    }
-    
-    func checkCalendarPermission() -> Bool
-    {
-        print("checking permission \n")
-        
-        var status = false
-        
-        switch EKEventStore.authorizationStatus(for: .event)
-        {
-            case .authorized:
-                status = true
-            break
-            
-            case .notDetermined:
-                status = askCalendarPermission()
-            break
-            
-            default:
-                print("Default case!")
-        }
-        
-        return status
-    }
-    
-    func askCalendarPermission() -> Bool
-    {
-        var isPermissionGranted = false
-        eventStore.requestAccess(to: .event, completion:
-            {
-                (granted: Bool, error: Error?) -> Void in
-                if granted
-                {
-                    isPermissionGranted = true
-                }
-            }
-        )
-        
-        return isPermissionGranted
-    }
-    
-    /*
-     The following function is adopted from https://www.ioscreator.com/tutorials/add-event-calendar-ios-tutorial
-    */
-    func addCalendarEvent(currentProject: Project) -> String
-    {
-        print("add project to calendar \n")
-        let event = EKEvent(eventStore: eventStore)
-    
-        let calendars = eventStore.calendars(for: .event)
-        var isCalendarExist = false
-        var projectCalendar: EKCalendar? = nil
-        
-        for cal in calendars
-        {
-            if(cal.title == "Project Planner")
-            {
-                isCalendarExist = true
-                projectCalendar = cal
-                print("calendar found \(cal.title)\n")
-            }
-        }
-        
-        if(!isCalendarExist)
-        {
-            projectCalendar = createProjectCalendar()
-            print("calendar created \(projectCalendar?.title) \n")
-        }
-        
-        event.calendar = projectCalendar
-        event.title = currentProject.name
-        event.startDate = currentProject.dueDate
-        event.endDate = currentProject.dueDate
-        event.isAllDay = true
-        event.notes = currentProject.notes
-        
-        print("start date \(currentProject.dueDate) \n")
-        
-        do
-        {
-            try eventStore.save(event, span: .thisEvent)
-        }
-        
-        catch
-        {
-            let alertController = UIAlertController(title: "Alert", message: "An error occurred while adding the project to the calendar!", preferredStyle: .alert)
-            
-            let okAction = UIAlertAction(title: "OK", style: .default)
-            {
-                (action:UIAlertAction) in
-            }
-            
-            alertController.addAction(okAction)
-            self.present(alertController, animated: true, completion: nil)
-            
-            let nserror = error as NSError
-            print("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
-        
-        print("eventIdentifier \(event.eventIdentifier)")
-        return event.eventIdentifier
-    }
-    
-    /*
-     The following function is adopted from https://www.andrewcbancroft.com/2015/06/17/creating-calendars-with-event-kit-and-swift/
-    */
-    func createProjectCalendar() -> EKCalendar
-    {
-        let newCalendar = EKCalendar(for: .event, eventStore: eventStore)
-        
-        newCalendar.title = "Project Planner"
-        
-        let sourcesInEventStore = eventStore.sources
-        
-        newCalendar.source = sourcesInEventStore.filter
-            {
-                (source: EKSource) -> Bool in source.sourceType.rawValue == EKSourceType.local.rawValue
-            }.first!
-        
-        do
-        {
-            try eventStore.saveCalendar(newCalendar, commit: true)
-        }
-        
-        catch
-        {
-            let alertController = UIAlertController(title: "Alert", message: "An error occurred while creating the calendar!", preferredStyle: .alert)
-            
-            let okAction = UIAlertAction(title: "OK", style: .default)
-            {
-                (action:UIAlertAction) in
-            }
-            
-            alertController.addAction(okAction)
-            self.present(alertController, animated: true, completion: nil)
-            
-            let nserror = error as NSError
-            print("Unresolved error \(nserror), \(nserror.userInfo)")
-        }
-        
-        return newCalendar
-    }
-    
-    func updateCalendarEvent()
-    {
-        //to do
-    }
-    
-    func deleteCalendarEvent()
-    {
-        //to do
     }
 }
