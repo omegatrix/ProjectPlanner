@@ -42,10 +42,10 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
             txtView_note.text = task?.notes
             txtView_note.textColor = UIColor.black
             switch_reminder.isOn = helper.unwrapBoolean(optionalBool: task?.remindWhenDatePassed)
-            slider_progress.value = helper.intToFloat(value: helper.unwrapInt(optionalInt: task?.progress))
+            slider_progress.value = helper.intToFloat(value: helper.unwrapInt16(optionalInt: task?.progress))
             datePicker_startDate.date = helper.unwrapDate(optionalDate: task?.startDate)
             datePicker_dueDate.date = helper.unwrapDate(optionalDate: task?.dueDate)
-            label_taskProgress.text = "Progress - \(helper.unwrapInt(optionalInt: task?.progress)) %"
+            label_taskProgress.text = "Progress - \(helper.unwrapInt16(optionalInt: task?.progress)) %"
             btn_submit.setTitle("Update", for: .normal)
         }
         
@@ -104,7 +104,7 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
     @IBAction func onButtonPress(_ sender: UIButton)
     {
         let isTaskNameEmpty = helper.unwrapBoolean(optionalBool: txtField_name.text?.isEmpty)
-        let today = helper.unwrapDate(optionalDate: Date())
+        let today = helper.unwrapDate(optionalDate: Date.init())
         let dueDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
         let startDate = helper.unwrapDate(optionalDate: datePicker_startDate.date)
         let projectDueDate = helper.unwrapDate(optionalDate: currentProject?.dueDate)

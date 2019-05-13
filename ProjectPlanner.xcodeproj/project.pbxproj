@@ -18,6 +18,7 @@
 		691981B02273A0A3007F7B45 /* ProjectPlanner.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 691981AE2273A0A3007F7B45 /* ProjectPlanner.xcdatamodeld */; };
 		694BB2C12275ED9C0005E85F /* ProjectSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694BB2C02275ED9C0005E85F /* ProjectSummaryViewController.swift */; };
 		69BFB59D22837AC000A12449 /* Add_Edit_TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69BFB59C22837AC000A12449 /* Add_Edit_TaskViewController.swift */; };
+		69DC88C32288E8D4005F9599 /* TaskPopOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DC88C22288E8D4005F9599 /* TaskPopOverViewController.swift */; };
 		69DD2CB92274B44300B83533 /* Add_Edit_ProjectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DD2CB82274B44300B83533 /* Add_Edit_ProjectViewController.swift */; };
 		69DD2CBB22750D1200B83533 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DD2CBA22750D1200B83533 /* Helper.swift */; };
 		69FE17CA2286EDB200CBB802 /* CalendarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69FE17C92286EDB200CBB802 /* CalendarHelper.swift */; };
@@ -37,6 +38,7 @@
 		691981AF2273A0A3007F7B45 /* ProjectPlanner.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ProjectPlanner.xcdatamodel; sourceTree = "<group>"; };
 		694BB2C02275ED9C0005E85F /* ProjectSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSummaryViewController.swift; sourceTree = "<group>"; };
 		69BFB59C22837AC000A12449 /* Add_Edit_TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Add_Edit_TaskViewController.swift; sourceTree = "<group>"; };
+		69DC88C22288E8D4005F9599 /* TaskPopOverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskPopOverViewController.swift; sourceTree = "<group>"; };
 		69DD2CB82274B44300B83533 /* Add_Edit_ProjectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Add_Edit_ProjectViewController.swift; sourceTree = "<group>"; };
 		69DD2CBA22750D1200B83533 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		69FE17C92286EDB200CBB802 /* CalendarHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarHelper.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				690AED962283167E00FCA292 /* CircularProgressBar.swift */,
 				69BFB59C22837AC000A12449 /* Add_Edit_TaskViewController.swift */,
 				69FE17C92286EDB200CBB802 /* CalendarHelper.swift */,
+				69DC88C22288E8D4005F9599 /* TaskPopOverViewController.swift */,
 			);
 			path = ProjectPlanner;
 			sourceTree = "<group>";
@@ -173,6 +176,7 @@
 				6919819F22739D7F007F7B45 /* DetailViewController.swift in Sources */,
 				69DD2CBB22750D1200B83533 /* Helper.swift in Sources */,
 				69BFB59D22837AC000A12449 /* Add_Edit_TaskViewController.swift in Sources */,
+				69DC88C32288E8D4005F9599 /* TaskPopOverViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

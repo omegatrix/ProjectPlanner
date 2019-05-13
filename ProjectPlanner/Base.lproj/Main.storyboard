@@ -35,7 +35,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vq1-V5-coA">
-                                <rect key="frame" x="20" y="70" width="950" height="300"/>
+                                <rect key="frame" x="20" y="70" width="948" height="300"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <connections>
                                     <segue destination="kcf-P8-c7x" kind="embed" identifier="projectSummary" id="r9g-Cp-0lq"/>
@@ -54,11 +54,6 @@
                                             <rect key="frame" x="0.0" y="0.0" width="951" height="199.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CQ9-O8-R1j">
-                                                    <rect key="frame" x="888" y="11" width="48" height="50"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                    <state key="normal" title="Edit" image="edit"/>
-                                                </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Task Title - Due Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qLK-Fk-cBI">
                                                     <rect key="frame" x="15" y="11" width="832" height="24"/>
                                                     <constraints>
@@ -77,18 +72,14 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                                 </textView>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h7Y-jr-gQj" customClass="CircularProgressBar" customModule="ProjectPlanner" customModuleProvider="target">
-                                                    <rect key="frame" x="436" y="19" width="175" height="170"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notify when due date is passed - Yes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0gw-wE-VZk">
-                                                    <rect key="frame" x="636" y="168" width="284" height="21"/>
+                                                    <rect key="frame" x="432" y="131" width="284" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Start Date - dd/MM/YYYY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0N0-Ut-1gt">
-                                                    <rect key="frame" x="636" y="106" width="300" height="21"/>
+                                                    <rect key="frame" x="432" y="69" width="300" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="LU6-Hl-PM1"/>
                                                     </constraints>
@@ -96,26 +87,37 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CQ9-O8-R1j">
+                                                    <rect key="frame" x="438" y="145" width="47" height="44"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <connections>
+                                                        <action selector="onEditPress:" destination="mjz-dV-E8R" eventType="touchUpInside" id="LGM-LG-iFv"/>
+                                                    </connections>
+                                                </button>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="h7Y-jr-gQj" customClass="CircularProgressBar" customModule="ProjectPlanner" customModuleProvider="target">
+                                                    <rect key="frame" x="740" y="14" width="175" height="170"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </view>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="0N0-Ut-1gt" firstAttribute="leading" secondItem="0gw-wE-VZk" secondAttribute="leading" id="0Hb-CD-Vqs"/>
-                                                <constraint firstItem="CQ9-O8-R1j" firstAttribute="leading" secondItem="qLK-Fk-cBI" secondAttribute="trailing" constant="41" id="4VP-q7-INw"/>
-                                                <constraint firstItem="qLK-Fk-cBI" firstAttribute="top" secondItem="CQ9-O8-R1j" secondAttribute="top" id="7BC-d4-d2N"/>
-                                                <constraint firstItem="0gw-wE-VZk" firstAttribute="leading" secondItem="h7Y-jr-gQj" secondAttribute="trailing" constant="25" id="F5K-BC-Xgl"/>
+                                                <constraint firstItem="CQ9-O8-R1j" firstAttribute="leading" secondItem="qLK-Fk-cBI" secondAttribute="trailing" constant="-409" id="4VP-q7-INw"/>
+                                                <constraint firstItem="qLK-Fk-cBI" firstAttribute="top" secondItem="CQ9-O8-R1j" secondAttribute="top" constant="-134" id="7BC-d4-d2N"/>
+                                                <constraint firstItem="0gw-wE-VZk" firstAttribute="leading" secondItem="h7Y-jr-gQj" secondAttribute="trailing" constant="-483" id="F5K-BC-Xgl"/>
                                                 <constraint firstItem="qLK-Fk-cBI" firstAttribute="top" secondItem="yPL-ZK-yeO" secondAttribute="topMargin" id="FIb-aV-1lu"/>
                                                 <constraint firstItem="x0X-DY-UrY" firstAttribute="top" secondItem="qLK-Fk-cBI" secondAttribute="bottom" constant="16" id="GSA-2o-lV4"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="0N0-Ut-1gt" secondAttribute="trailing" id="Lwo-7P-STa"/>
-                                                <constraint firstItem="0N0-Ut-1gt" firstAttribute="trailing" secondItem="CQ9-O8-R1j" secondAttribute="trailing" id="NHV-X2-7hY"/>
-                                                <constraint firstItem="x0X-DY-UrY" firstAttribute="bottom" secondItem="0gw-wE-VZk" secondAttribute="bottom" id="S7I-GW-iLd"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="0N0-Ut-1gt" secondAttribute="trailing" constant="204" id="Lwo-7P-STa"/>
+                                                <constraint firstItem="0N0-Ut-1gt" firstAttribute="trailing" secondItem="CQ9-O8-R1j" secondAttribute="trailing" constant="247" id="NHV-X2-7hY"/>
+                                                <constraint firstItem="x0X-DY-UrY" firstAttribute="bottom" secondItem="0gw-wE-VZk" secondAttribute="bottom" constant="37" id="S7I-GW-iLd"/>
                                                 <constraint firstItem="x0X-DY-UrY" firstAttribute="bottom" secondItem="yPL-ZK-yeO" secondAttribute="bottomMargin" id="VbU-3Y-pOS"/>
                                                 <constraint firstItem="qLK-Fk-cBI" firstAttribute="leading" secondItem="x0X-DY-UrY" secondAttribute="leading" constant="5" id="Yim-D1-kMt"/>
-                                                <constraint firstItem="h7Y-jr-gQj" firstAttribute="top" secondItem="qLK-Fk-cBI" secondAttribute="bottom" constant="-16" id="fp1-2D-uhi"/>
-                                                <constraint firstItem="h7Y-jr-gQj" firstAttribute="leading" secondItem="x0X-DY-UrY" secondAttribute="trailing" constant="26" id="h5T-8L-bbM"/>
-                                                <constraint firstItem="x0X-DY-UrY" firstAttribute="bottom" secondItem="h7Y-jr-gQj" secondAttribute="bottom" id="jVN-Nq-dQk"/>
+                                                <constraint firstItem="h7Y-jr-gQj" firstAttribute="top" secondItem="qLK-Fk-cBI" secondAttribute="bottom" constant="-21" id="fp1-2D-uhi"/>
+                                                <constraint firstItem="h7Y-jr-gQj" firstAttribute="leading" secondItem="x0X-DY-UrY" secondAttribute="trailing" constant="330" id="h5T-8L-bbM"/>
+                                                <constraint firstItem="x0X-DY-UrY" firstAttribute="bottom" secondItem="h7Y-jr-gQj" secondAttribute="bottom" constant="5" id="jVN-Nq-dQk"/>
                                                 <constraint firstItem="qLK-Fk-cBI" firstAttribute="leading" secondItem="yPL-ZK-yeO" secondAttribute="leadingMargin" id="kQM-07-ILe"/>
-                                                <constraint firstAttribute="trailing" secondItem="h7Y-jr-gQj" secondAttribute="trailing" constant="340" id="lHt-O8-CUR"/>
-                                                <constraint firstAttribute="bottom" secondItem="0N0-Ut-1gt" secondAttribute="bottom" constant="72.5" id="pTV-Ie-NCC"/>
-                                                <constraint firstItem="0N0-Ut-1gt" firstAttribute="top" secondItem="CQ9-O8-R1j" secondAttribute="bottom" constant="45" id="x1T-Lr-PwB"/>
+                                                <constraint firstAttribute="trailing" secondItem="h7Y-jr-gQj" secondAttribute="trailing" constant="36" id="lHt-O8-CUR"/>
+                                                <constraint firstAttribute="bottom" secondItem="0N0-Ut-1gt" secondAttribute="bottom" constant="109.5" id="pTV-Ie-NCC"/>
+                                                <constraint firstItem="0N0-Ut-1gt" firstAttribute="top" secondItem="CQ9-O8-R1j" secondAttribute="bottom" constant="-120" id="x1T-Lr-PwB"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -129,7 +131,7 @@
                                 </prototypes>
                             </tableView>
                             <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qz2-6E-brl">
-                                <rect key="frame" x="20" y="370" width="950" height="44"/>
+                                <rect key="frame" x="20" y="370" width="948" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
                                     <navigationItem title="Tasks" id="bXe-Be-2Ot">
@@ -336,15 +338,15 @@
             <objects>
                 <viewController id="kcf-P8-c7x" customClass="ProjectSummaryViewController" customModule="ProjectPlanner" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nl3-qp-Ho3">
-                        <rect key="frame" x="0.0" y="0.0" width="950" height="300"/>
+                        <rect key="frame" x="0.0" y="0.0" width="948" height="300"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AWH-UL-YFo" customClass="CircularProgressBar" customModule="ProjectPlanner" customModuleProvider="target">
-                                <rect key="frame" x="20" y="64" width="199" height="156"/>
+                                <rect key="frame" x="20" y="64" width="198" height="156"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GFY-sP-dcc" customClass="CircularProgressBar" customModule="ProjectPlanner" customModuleProvider="target">
-                                <rect key="frame" x="731" y="64" width="200" height="156"/>
+                                <rect key="frame" x="730" y="64" width="199" height="156"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Added to calendar - " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zie-vN-RPf">
@@ -357,13 +359,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Project name - Priority - Due date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wii-oX-5L2">
-                                <rect key="frame" x="20" y="24" width="910" height="32"/>
+                                <rect key="frame" x="20" y="24" width="908" height="32"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                 <color key="textColor" red="0.02433059885857547" green="0.2767953758389603" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NNf-pm-0iH">
-                                <rect key="frame" x="275" y="64" width="400" height="114"/>
+                                <rect key="frame" x="274" y="64" width="400" height="114"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="400" id="1nh-iK-LDj"/>
@@ -372,9 +374,9 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CmC-sE-nrU">
-                                <rect key="frame" x="451" y="230" width="48" height="50"/>
+                                <rect key="frame" x="451" y="230" width="59" height="60"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="YdY-ph-K9E"/>
+                                    <constraint firstAttribute="height" constant="60" id="YdY-ph-K9E"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="Edit" image="edit"/>
@@ -384,26 +386,37 @@
                                     </segue>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Created on - dd/MM/YYYY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uVN-Of-7zs">
+                                <rect key="frame" x="693" y="259" width="235" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="235" id="jks-EX-t1T"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.02433059886" green="0.27679537580000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="AWH-UL-YFo" firstAttribute="leading" secondItem="zie-vN-RPf" secondAttribute="leading" id="03K-jX-Fwj"/>
                             <constraint firstItem="AWH-UL-YFo" firstAttribute="top" secondItem="NNf-pm-0iH" secondAttribute="top" id="90w-ex-g0s"/>
+                            <constraint firstItem="uVN-Of-7zs" firstAttribute="trailing" secondItem="Wii-oX-5L2" secondAttribute="trailing" id="BEE-Kp-JIP"/>
                             <constraint firstItem="AWH-UL-YFo" firstAttribute="bottom" secondItem="GFY-sP-dcc" secondAttribute="bottom" id="DxV-EU-Ogx"/>
                             <constraint firstItem="Wii-oX-5L2" firstAttribute="top" secondItem="dqn-sS-p2J" secondAttribute="top" id="Lh3-Xx-1ZF"/>
                             <constraint firstItem="Wii-oX-5L2" firstAttribute="trailing" secondItem="nl3-qp-Ho3" secondAttribute="trailingMargin" id="Mls-Oy-QLR"/>
                             <constraint firstItem="AWH-UL-YFo" firstAttribute="leading" secondItem="Wii-oX-5L2" secondAttribute="leading" id="Mvd-l7-xaw"/>
-                            <constraint firstItem="zie-vN-RPf" firstAttribute="bottom" secondItem="CmC-sE-nrU" secondAttribute="bottom" id="RA9-Qi-uEz"/>
+                            <constraint firstItem="zie-vN-RPf" firstAttribute="bottom" secondItem="CmC-sE-nrU" secondAttribute="bottom" constant="-10" id="RA9-Qi-uEz"/>
                             <constraint firstItem="Wii-oX-5L2" firstAttribute="leading" secondItem="nl3-qp-Ho3" secondAttribute="leadingMargin" id="SNS-qf-JCf"/>
                             <constraint firstItem="NNf-pm-0iH" firstAttribute="leading" secondItem="AWH-UL-YFo" secondAttribute="trailing" constant="56" id="SRO-T3-FBh"/>
                             <constraint firstItem="NNf-pm-0iH" firstAttribute="top" secondItem="GFY-sP-dcc" secondAttribute="top" id="TJi-4F-iTO"/>
                             <constraint firstItem="zie-vN-RPf" firstAttribute="top" secondItem="AWH-UL-YFo" secondAttribute="bottom" constant="39" id="VnM-3K-y0X"/>
-                            <constraint firstItem="NNf-pm-0iH" firstAttribute="centerX" secondItem="CmC-sE-nrU" secondAttribute="centerX" id="dlf-PQ-p5e"/>
+                            <constraint firstItem="NNf-pm-0iH" firstAttribute="centerX" secondItem="CmC-sE-nrU" secondAttribute="centerX" constant="-6.5" id="dlf-PQ-p5e"/>
                             <constraint firstItem="Wii-oX-5L2" firstAttribute="centerX" secondItem="NNf-pm-0iH" secondAttribute="centerX" id="exo-JC-fhT"/>
                             <constraint firstItem="dqn-sS-p2J" firstAttribute="trailing" secondItem="GFY-sP-dcc" secondAttribute="trailing" constant="19" id="gOo-UH-FTG"/>
                             <constraint firstItem="GFY-sP-dcc" firstAttribute="leading" secondItem="NNf-pm-0iH" secondAttribute="trailing" constant="56" id="gqH-Tp-bV6"/>
+                            <constraint firstItem="uVN-Of-7zs" firstAttribute="baseline" secondItem="zie-vN-RPf" secondAttribute="baseline" id="he7-qN-3Ps"/>
                             <constraint firstItem="CmC-sE-nrU" firstAttribute="top" secondItem="NNf-pm-0iH" secondAttribute="bottom" constant="52" id="tAT-eJ-7XI"/>
-                            <constraint firstItem="dqn-sS-p2J" firstAttribute="trailing" secondItem="CmC-sE-nrU" secondAttribute="trailing" constant="451" id="uKJ-OV-tLL"/>
+                            <constraint firstItem="dqn-sS-p2J" firstAttribute="trailing" secondItem="CmC-sE-nrU" secondAttribute="trailing" constant="438" id="uKJ-OV-tLL"/>
                             <constraint firstAttribute="bottom" secondItem="zie-vN-RPf" secondAttribute="bottom" constant="20" symbolic="YES" id="wQV-ZT-bco"/>
                             <constraint firstItem="AWH-UL-YFo" firstAttribute="top" secondItem="Wii-oX-5L2" secondAttribute="bottom" constant="8" symbolic="YES" id="z97-MU-zRm"/>
                         </constraints>
@@ -413,6 +426,7 @@
                     <connections>
                         <outlet property="btn_edit" destination="CmC-sE-nrU" id="sfh-Ag-8ah"/>
                         <outlet property="label_addedToCalendar" destination="zie-vN-RPf" id="QOY-b6-Kb3"/>
+                        <outlet property="label_createdOn" destination="uVN-Of-7zs" id="EXb-A7-bGZ"/>
                         <outlet property="label_title" destination="Wii-oX-5L2" id="0lG-XS-bi0"/>
                         <outlet property="progressBar_daysRemaining" destination="GFY-sP-dcc" id="2U4-rh-yII"/>
                         <outlet property="progressBar_percentage" destination="AWH-UL-YFo" id="R7R-Ka-tht"/>
@@ -426,7 +440,7 @@
         <!--Add Edit Task View Controller-->
         <scene sceneID="KSb-qU-iZN">
             <objects>
-                <viewController id="Dch-3U-0sj" customClass="Add_Edit_TaskViewController" customModule="ProjectPlanner" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TaskViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Dch-3U-0sj" customClass="Add_Edit_TaskViewController" customModule="ProjectPlanner" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="KLB-ZU-7hF">
                         <rect key="frame" x="0.0" y="0.0" width="650" height="400"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -560,6 +574,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Tll-UG-LXB"/>
-        <segue reference="diV-Ls-vTR"/>
+        <segue reference="En5-80-WvF"/>
     </inferredMetricsTieBreakers>
 </document>

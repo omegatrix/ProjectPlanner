@@ -23,10 +23,12 @@ class CircularProgressBar: UIView
         label.text = "0"
     }
     
+    public var progress: Int = 0
+    
     
     //MARK: Public
     
-    public var lineWidth:CGFloat = 50
+    public var lineWidth:CGFloat = 20
     {
         didSet
         {
@@ -45,16 +47,14 @@ class CircularProgressBar: UIView
         }
     }
     
-    public var safePercent: Int = 100
-    {
-        didSet
-        {
-            setForegroundLayerColorForSafePercent()
-        }
-    }
+    public var daysRemain: Int = 0
+    public var strokeEndVal: CGFloat = 0
     
-    public func setProgress(to progressConstant: Double, withAnimation: Bool, daysRemain: Bool)
+    public func setProgress(to progressConstant: Double, withAnimation: Bool)
     {
+        var backgroundStrokeEnd: CGFloat = 1.0
+        var foregroundStrokeEnd: CGFloat = 0.0
+        
         
         var progress: Double
         {
@@ -64,19 +64,20 @@ class CircularProgressBar: UIView
                 else if progressConstant < 0 { return 0 }
                 else { return progressConstant }
             }
-        }
+        }        
         
-        foregroundLayer.strokeEnd = CGFloat(progress)
+        foregroundLayer.strokeEnd = CGFloat(progress) / 100.0
         
         if withAnimation
         {
             let animation = CABasicAnimation(keyPath: "strokeEnd")
             animation.fromValue = 0
-            animation.toValue = progress
+            animation.toValue = CGFloat(progress / 100.0)
             animation.duration = 2
             foregroundLayer.add(animation, forKey: "foregroundAnimation")
             
         }
+        
         
         var currentTime:Double = 0
         let timer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { (timer) in
@@ -89,7 +90,8 @@ class CircularProgressBar: UIView
             {
                 currentTime += 0.05
                 let percent = currentTime/2
-                self.label.text = daysRemain ? "\(Int(progress * percent)) Days Left" : "\(Int(progress * percent)) % Complete"
+                self.progress = Int(progress * percent)
+                self.label.text = (self.daysRemain > 0) ? "\(self.daysRemain) Days Left" : "\(Int(progress * percent)) % Complete"
                 self.setForegroundLayerColorForSafePercent()
                 self.configLabel()
             }
@@ -140,6 +142,7 @@ class CircularProgressBar: UIView
         self.backgroundLayer.strokeColor = UIColor.lightGray.cgColor
         self.backgroundLayer.lineWidth = lineWidth - (lineWidth * 20/100)
         self.backgroundLayer.fillColor = UIColor.clear.cgColor
+        self.backgroundLayer.strokeEnd = 1
         self.layer.addSublayer(backgroundLayer)
         
     }
@@ -157,7 +160,7 @@ class CircularProgressBar: UIView
         foregroundLayer.lineWidth = lineWidth
         foregroundLayer.fillColor = UIColor.clear.cgColor
         foregroundLayer.strokeColor = UIColor.red.cgColor
-        foregroundLayer.strokeEnd = 0
+        //foregroundLayer.strokeEnd = 0
         
         self.layer.addSublayer(foregroundLayer)
         
@@ -181,15 +184,26 @@ class CircularProgressBar: UIView
     
     private func setForegroundLayerColorForSafePercent()
     {
-//        if Int(label.text!)! >= self.safePercent
-//        {
-//            self.foregroundLayer.strokeColor = UIColor.green.cgColor
-//        }
-//
-//        else
-//        {
-//            self.foregroundLayer.strokeColor = UIColor.red.cgColor
-//        }
+        if(self.progress > 75)
+        {
+            self.foregroundLayer.strokeColor = UIColor.green.cgColor
+        }
+        
+        else if(self.progress > 50 && progress <= 75)
+        {
+            self.foregroundLayer.strokeColor = UIColor.yellow.cgColor
+        }
+        
+        else if(self.progress > 25 && self.progress <= 50)
+        {
+            self.foregroundLayer.strokeColor = UIColor.orange.cgColor
+        }
+        
+        else
+        {
+            self.foregroundLayer.strokeColor = UIColor.red.cgColor
+        }
+        
     }
     
     private func setupView()

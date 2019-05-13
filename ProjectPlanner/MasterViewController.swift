@@ -45,7 +45,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         let newProject = Project(context: context)
              
         // If appropriate, configure the new managed object.
-        newProject.dueDate = Date()
+        newProject.dueDate = Date.init()
 
         // Save the context.
         do
@@ -134,6 +134,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
+        //to be implemented
     }
 
     func configureCell(_ cell: UITableViewCell, withProject project: Project)

@@ -18,6 +18,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var fetchRequest: NSFetchRequest<Task>!
     var tasks: [Task]!
     var project: Project?
+    var currentTask: Task?
     
     override func viewDidLoad()
     {
@@ -49,6 +50,14 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             if let addTask = segue.destination as? Add_Edit_TaskViewController
             {
                 addTask.currentProject = project
+            }
+        }
+        
+        if segue.identifier == "editTaskSegue"
+        {
+            if let editTask = segue.destination as? Add_Edit_TaskViewController
+            {
+                editTask.task = currentTask
             }
         }
     }
@@ -95,6 +104,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath) as! TaskTableViewCell
         let task = tasks![indexPath.row]
+        currentTask = task
+        
         cell.task = task
         let note = helper.unwrapBoolean(optionalBool: task.notes?.isEmpty) ? "No notes available" : helper.unwrapString(optionalString: task.notes)
         cell.label_title.text = "\(helper.unwrapString(optionalString: task.name)) - Due on \(helper.dateToString(date: helper.unwrapDate(optionalDate: task.dueDate)))"
@@ -104,10 +115,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         cell.txtView_notes.layer.borderColor = UIColor.lightGray.cgColor
         cell.txtView_notes.layer.borderWidth = 1
         cell.txtView_notes.isEditable = false
-        cell.progressBar_task.labelSize = 20
-        cell.progressBar_task.safePercent = 100
-        cell.progressBar_task.setProgress(to: Double(task.progress), withAnimation: false, daysRemain: false)
-        cell.progressBar_task.lineWidth = 20
+        cell.progressBar_task.labelSize = 18
+        cell.progressBar_task.setProgress(to: Double(task.progress), withAnimation: true)
+        cell.progressBar_task.lineWidth = 18
         return cell
     }
     

@@ -46,7 +46,7 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
             txtField_name.text = project?.name
             txtView_note.text = project?.notes
             txtView_note.textColor = UIColor.black
-            segment_priority.selectedSegmentIndex = helper.stringToSegmentIndex(priority: helper.unwrapString(optionalString: project?.priority))
+            segment_priority.selectedSegmentIndex = helper.int16_To_Int(value: helper.unwrapInt16(optionalInt: project?.priority))
             datePicker_dueDate.date = helper.unwrapDate(optionalDate: project?.dueDate)
             switch_addToCalendar.isOn = helper.unwrapBoolean(optionalBool: project?.addToCalendar)
             btn_submit.setTitle("Update", for: .normal)
@@ -91,7 +91,7 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
     {
         let isProjectNameEmpty = txtField_name.text?.isEmpty ?? true
         let isAddToCalendar = switch_addToCalendar.isOn
-        let today = helper.unwrapDate(optionalDate: Date())
+        let today = helper.unwrapDate(optionalDate: Date.init())
         let formattedDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
         let calendarPermissionGranted = calendarHelper.checkCalendarPermission()
         var calendarEventId = ""
@@ -168,13 +168,15 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
     
     func saveProject()
     {
-        let priority = helper.segmentIndexToString(segmentIndex: segment_priority.selectedSegmentIndex)
+        let priority = helper.int_To_int16(value: segment_priority.selectedSegmentIndex)
         let dueDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
         let addToCalendar = helper.unwrapBoolean(optionalBool: switch_addToCalendar.isOn)
+        let createdOn = helper.unwrapDate(optionalDate: Date.init())
         var calendarEventId = ""
         
         let newProject = Project(context: context)
         newProject.id = UUID.init()
+        newProject.createdOn = createdOn
         newProject.name = txtField_name.text
         newProject.notes = (txtView_note.textColor == UIColor.lightGray) ? "" : txtView_note.text
         newProject.priority = priority
@@ -212,7 +214,7 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         let newName = txtField_name.text
         let newNotes = txtView_note.text
         let newDueDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
-        let newPriority = helper.segmentIndexToString(segmentIndex: segment_priority.selectedSegmentIndex)
+        let newPriority = helper.int_To_int16(value: segment_priority.selectedSegmentIndex)
         let newAddToCalendar = helper.unwrapBoolean(optionalBool: switch_addToCalendar.isOn)
         var calendarEventId = ""
         var taskDueDateInFuture = false
