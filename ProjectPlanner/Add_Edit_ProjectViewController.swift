@@ -14,6 +14,7 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
 {
     var project: Project?
     var isCalendarPermissionGranted = false
+    var projectSummary: ProjectSummaryViewController? = nil
     
     @IBOutlet weak var txtField_name: UITextField!
     @IBOutlet weak var txtView_note: UITextView!
@@ -204,8 +205,8 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         }
         
         newProject.calendarEventId = calendarEventId
-        
         (UIApplication.shared.delegate as! AppDelegate).saveContext()
+
         dismiss(animated: true, completion: nil)
     }
     
@@ -323,6 +324,7 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
                 do
                 {
                     try managedContext.save()
+                    projectSummary?.setupView(currentProject: objectToUpdate as! Project)
                 }
                     
                 catch

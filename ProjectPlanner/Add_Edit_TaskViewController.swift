@@ -14,6 +14,8 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
     var task: Task?
     var currentProject: Project?
     let helper = Helper()
+    var projectSummary: ProjectSummaryViewController? = nil
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     @IBOutlet weak var txtField_name: UITextField!
@@ -108,6 +110,7 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
         let dueDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
         let startDate = helper.unwrapDate(optionalDate: datePicker_startDate.date)
         let projectDueDate = helper.unwrapDate(optionalDate: currentProject?.dueDate)
+        let projectCreatedOn = helper.unwrapDate(optionalDate: currentProject?.createdOn)
         
         if isTaskNameEmpty
         {
@@ -138,9 +141,10 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
             return
         }
             
-        if(dueDate > projectDueDate)
+        if(dueDate > projectDueDate || startDate > projectCreatedOn)
         {
-            let alertController = UIAlertController(title: "Alert", message: "Task due date cannot occur after Project due date!", preferredStyle: .alert)
+            let errorMessage = dueDate > projectDueDate ? "Task due date cannot occur after Project due date!" : "Task start date cannot be before project created on date!"
+            let alertController = UIAlertController(title: "Alert", message: errorMessage, preferredStyle: .alert)
             
             let okAction = UIAlertAction(title: "OK", style: .default)
             {
@@ -186,6 +190,7 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
                     do
                     {
                         try managedContext.save()
+                        projectSummary?.refreshProjectProgress()
                     }
                         
                     catch

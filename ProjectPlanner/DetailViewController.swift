@@ -18,7 +18,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var fetchRequest: NSFetchRequest<Task>!
     var tasks: [Task]!
     var project: Project?
-    var currentTask: Task?
+    var currentTask: Task? = nil
+    var projectSummary: ProjectSummaryViewController?
     
     override func viewDidLoad()
     {
@@ -35,13 +36,37 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool
+    {
+        if(identifier == "editTaskSegue")
+        {
+            if(currentTask == nil)
+            {
+                let alertController = UIAlertController(title: "Alert", message: "Please select a task to proceed!", preferredStyle: .alert)
+                
+                let okAction = UIAlertAction(title: "OK", style: .default)
+                {
+                    (action:UIAlertAction) in
+                }
+                
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+                return false
+            }
+        }
+        
+        return true
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
+        
         if segue.identifier == "projectSummary"
         {
             if let projectSummary = segue.destination as? ProjectSummaryViewController
             {
                 projectSummary.project = project
+                self.projectSummary = projectSummary
             }
         }
         
@@ -50,6 +75,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             if let addTask = segue.destination as? Add_Edit_TaskViewController
             {
                 addTask.currentProject = project
+                addTask.projectSummary = self.projectSummary
             }
         }
         
@@ -57,9 +83,22 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         {
             if let editTask = segue.destination as? Add_Edit_TaskViewController
             {
+                editTask.currentProject = project
                 editTask.task = currentTask
+                editTask.projectSummary = self.projectSummary
             }
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
+        let task = tasks![indexPath.row]
+        if(task != nil)
+        {
+            currentTask = task
+        }
+        
+        print("task name \(task.name)")
     }
     
     func numberOfSections(in tableView: UITableView) -> Int
@@ -104,7 +143,6 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath) as! TaskTableViewCell
         let task = tasks![indexPath.row]
-        currentTask = task
         
         cell.task = task
         let note = helper.unwrapBoolean(optionalBool: task.notes?.isEmpty) ? "No notes available" : helper.unwrapString(optionalString: task.notes)
@@ -125,7 +163,6 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     {
         //   cell.detailTextLabel?.text = "test label"
         
- 
     }
     
     //MARK: - fetch results controller

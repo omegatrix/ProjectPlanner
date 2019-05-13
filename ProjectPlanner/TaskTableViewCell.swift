@@ -25,14 +25,6 @@ class TaskTableViewCell: UITableViewCell
         // Initialization code
     }
     
-    @IBAction func onEditPress(_ sender: UIButton)
-    {
-        let taskPopover = TaskPopOverViewController()
-        
-        taskPopover.showPopover(task: self.task!)
-        
-    }
-    
     override func setSelected(_ selected: Bool, animated: Bool)
     {
         super.setSelected(selected, animated: animated)

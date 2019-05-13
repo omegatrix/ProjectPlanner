@@ -135,11 +135,6 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             }
         }
     }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
-    {
-        //to be implemented
-    }
 
     func configureCell(_ cell: UITableViewCell, withProject project: Project)
     {
