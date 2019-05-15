@@ -59,15 +59,15 @@ class ProjectSummaryViewController: UIViewController
         let notes = helper.unwrapBoolean(optionalBool: currentProject.notes?.isEmpty) ? "No notes available!" : helper.unwrapString(optionalString: currentProject.notes)
         let priorityLiteral = helper.priorityLiteral(segmentIndex: helper.unwrapInt16(optionalInt: currentProject.priority))
         let addedToCalendar = "Added to calendar: \(helper.unwrapBoolean(optionalBool: currentProject.addToCalendar) ? "Yes" : "No")"
-        let today = Date.init()
+        let today = helper.unwrapDate(optionalDate: Date.init())
         let dueDate = helper.unwrapDate(optionalDate: currentProject.dueDate)
         let projectCreatedOn = helper.unwrapDate(optionalDate: currentProject.createdOn)
         let projectPercentage = calculateProjectProgress()
         let daysRemain = calculateDaysRemain(from: today, to: dueDate)
         let totalProjectDays = calculateDaysRemain(from: projectCreatedOn, to: dueDate)
-        let daysRemainPercentage = (daysRemain * 100) / totalProjectDays
+        let daysRemainPercentage = (daysRemain * 100) / (totalProjectDays > 0 ? totalProjectDays : 1)
         
-        print("Total days \(totalProjectDays)")
+        print("today \(today) due date \(dueDate) created on \(projectCreatedOn)")
         
         label_title.text = "\(projectName) - Priority \(priorityLiteral) - Due on \(helper.dateToString(date: dueDate))"
         txtView_notes.text = notes
@@ -90,6 +90,7 @@ class ProjectSummaryViewController: UIViewController
     func setDaysRemain(daysRemain: Int, daysRemainPercentage: Double)
     {
         progressBar_daysRemaining.labelSize = 20
+        progressBar_daysRemaining.showDaysRemain = true
         progressBar_daysRemaining.daysRemain = daysRemain
         progressBar_daysRemaining.setProgress(to: daysRemainPercentage, withAnimation: true)
         progressBar_daysRemaining.lineWidth = 20

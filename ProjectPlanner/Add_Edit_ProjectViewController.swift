@@ -42,6 +42,15 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         self.txtView_note.layer.borderColor = UIColor.lightGray.cgColor
         self.txtView_note.layer.borderWidth = 1
         
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(identifier: "GMT")
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        let dateselected = dateFormatter.string(from: datePicker_dueDate.date)
+        let newDate = dateFormatter.date(from: dateselected)
+        print("add project date string\(dateselected)")
+        print("add project date \(newDate)")
+    
+        
         if project != nil
         {
             txtField_name.text = project?.name
@@ -90,7 +99,7 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
     
     @IBAction func onButtonPress(_ sender: UIButton)
     {
-        let isProjectNameEmpty = txtField_name.text?.isEmpty ?? true
+        let isProjectNameEmpty = helper.unwrapBoolean(optionalBool: txtField_name.text?.isEmpty)
         let isAddToCalendar = switch_addToCalendar.isOn
         let today = helper.unwrapDate(optionalDate: Date.init())
         let formattedDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)

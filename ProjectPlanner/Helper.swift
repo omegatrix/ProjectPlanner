@@ -72,6 +72,7 @@ struct Helper
     func unwrapDate(optionalDate: Date?) -> Date
     {
         let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(identifier: "GMT")
         dateFormatter.dateFormat = "dd/MM/yyyy"
         let dateString = dateToString(date: Date.init())
         var unWrappedDate: Date = dateFormatter.date(from: dateString) ?? Date.init()//default value to return
@@ -89,6 +90,7 @@ struct Helper
     func dateToString(date: Date) -> String
     {
         let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(identifier: "GMT")
         dateFormatter.dateFormat = "dd/MM/yyyy"
         let dateString = dateFormatter.string(from: date)
         

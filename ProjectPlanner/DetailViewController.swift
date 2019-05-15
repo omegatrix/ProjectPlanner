@@ -98,7 +98,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             currentTask = task
         }
         
-        print("task name \(task.name)")
+        print("task name \(task.name) notification id\(task.notificationId)")
     }
     
     func numberOfSections(in tableView: UITableView) -> Int

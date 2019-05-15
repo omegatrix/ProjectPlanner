@@ -48,6 +48,7 @@ class CircularProgressBar: UIView
     }
     
     public var daysRemain: Int = 0
+    public var showDaysRemain: Bool = false
     public var strokeEndVal: CGFloat = 0
     
     public func setProgress(to progressConstant: Double, withAnimation: Bool)
@@ -91,7 +92,7 @@ class CircularProgressBar: UIView
                 currentTime += 0.05
                 let percent = currentTime/2
                 self.progress = Int(progress * percent)
-                self.label.text = (self.daysRemain > 0) ? "\(self.daysRemain) Days Left" : "\(Int(progress * percent)) % Complete"
+                self.label.text = (self.showDaysRemain) ? "\(self.daysRemain) Days Left" : "\(Int(progress * percent)) % Complete"
                 self.setForegroundLayerColorForSafePercent()
                 self.configLabel()
             }

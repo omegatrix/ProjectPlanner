@@ -20,7 +20,6 @@ struct CalendarHelper
         
         var status = false
         
-        
         switch EKEventStore.authorizationStatus(for: .event)
         {
             case .authorized:
@@ -30,7 +29,7 @@ struct CalendarHelper
             
             case .notDetermined:
                 print(" permission not determined!")
-                status = askCalendarPermission()
+                status = self.askCalendarPermission()
                 print(" permission not determined ? \(status)")
             break
             

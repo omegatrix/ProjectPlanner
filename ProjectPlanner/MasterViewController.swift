@@ -16,6 +16,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     var managedObjectContext: NSManagedObjectContext? = nil
     let helper = Helper()
     let calendarHelper = CalendarHelper()
+    let notificationHelper = NotificationHelper()
 
 
     override func viewDidLoad()
@@ -114,16 +115,32 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             let objectToDelete = fetchedResultsController.object(at: indexPath) as Project
             let eventIdentifier = helper.unwrapString(optionalString: objectToDelete.calendarEventId)
             let hasEvent = !helper.unwrapBoolean(optionalBool: eventIdentifier.isEmpty)
+            let objectTasks = objectToDelete.tasks?.allObjects as! [Task]
             context.delete(objectToDelete)
                 
             do
             {
-                try context.save()
+                if(objectTasks.count > 0)
+                {
+                    var notificationIds: [String] = []
+                    print("task count in delete \(objectTasks.count)")
+                    
+                    for eachTask in objectTasks
+                    {
+
+                        notificationIds.append(helper.unwrapString(optionalString: eachTask.notificationId))
+                    }
+                    
+                    notificationHelper.cancelNotification(notificationIds: notificationIds)
+                }
                 
-                if(hasEvent)
+                if(hasEvent) //delete the calendar event
                 {
                     calendarHelper.deleteCalendarEvent(calendarEventId: eventIdentifier)
                 }
+                
+                try context.save()
+                
             }
             
             catch
@@ -161,7 +178,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "dueDate", ascending: true)
+        let sortDescriptor = NSSortDescriptor(key: "dueDate", ascending: false)
         
         fetchRequest.sortDescriptors = [sortDescriptor]
         
