@@ -35,7 +35,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vq1-V5-coA">
-                                <rect key="frame" x="20" y="70" width="946" height="300"/>
+                                <rect key="frame" x="20" y="70" width="945" height="300"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <connections>
                                     <segue destination="kcf-P8-c7x" kind="embed" identifier="projectSummary" id="r9g-Cp-0lq"/>
@@ -128,7 +128,7 @@
                                 </prototypes>
                             </tableView>
                             <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Qz2-6E-brl">
-                                <rect key="frame" x="20" y="370" width="946" height="44"/>
+                                <rect key="frame" x="20" y="370" width="945" height="44"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <items>
                                     <navigationItem title="Tasks" id="bXe-Be-2Ot">
@@ -343,15 +343,15 @@
             <objects>
                 <viewController id="kcf-P8-c7x" customClass="ProjectSummaryViewController" customModule="ProjectPlanner" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="nl3-qp-Ho3">
-                        <rect key="frame" x="0.0" y="0.0" width="946" height="300"/>
+                        <rect key="frame" x="0.0" y="0.0" width="945" height="300"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AWH-UL-YFo" customClass="CircularProgressBar" customModule="ProjectPlanner" customModuleProvider="target">
-                                <rect key="frame" x="20" y="64" width="385" height="156"/>
+                                <rect key="frame" x="20" y="64" width="196.5" height="156"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GFY-sP-dcc" customClass="CircularProgressBar" customModule="ProjectPlanner" customModuleProvider="target">
-                                <rect key="frame" x="917" y="64" width="386" height="156"/>
+                                <rect key="frame" x="728.5" y="64" width="197.5" height="156"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Added to calendar - " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zie-vN-RPf">
@@ -364,13 +364,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Project name - Priority - Due date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wii-oX-5L2">
-                                <rect key="frame" x="20" y="24" width="1282" height="32"/>
+                                <rect key="frame" x="20" y="24" width="905" height="32"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                 <color key="textColor" red="0.02433059885857547" green="0.2767953758389603" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NNf-pm-0iH">
-                                <rect key="frame" x="461" y="64" width="400" height="114"/>
+                                <rect key="frame" x="272.5" y="64" width="400" height="114"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="400" id="1nh-iK-LDj"/>
@@ -379,7 +379,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CmC-sE-nrU">
-                                <rect key="frame" x="451" y="230" width="433" height="60"/>
+                                <rect key="frame" x="451" y="230" width="56" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="YdY-ph-K9E"/>
                                 </constraints>
@@ -392,7 +392,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Created on - dd/MM/YYYY" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uVN-Of-7zs">
-                                <rect key="frame" x="1067" y="259" width="235" height="21"/>
+                                <rect key="frame" x="690" y="259" width="235" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="235" id="jks-EX-t1T"/>
                                 </constraints>
@@ -582,6 +582,6 @@
     <inferredMetricsTieBreakers>
         <segue reference="Tll-UG-LXB"/>
         <segue reference="sp5-zi-o3V"/>
-        <segue reference="En5-80-WvF"/>
+        <segue reference="diV-Ls-vTR"/>
     </inferredMetricsTieBreakers>
 </document>

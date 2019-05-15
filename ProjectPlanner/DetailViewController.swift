@@ -30,10 +30,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.tableView.dataSource = self
         print("This is the ID -> \(project?.id)")
         
-        if(project != nil)
-        {
-            tasks = project?.tasks?.allObjects as! [Task]
-        }
+//        if(project != nil)
+//        {
+//            tasks = project?.tasks?.allObjects as! [Task]
+//        }
     }
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool
@@ -103,13 +103,14 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func numberOfSections(in tableView: UITableView) -> Int
     {
-        return 1
+        return self.fetchedResultsController.sections?.count ?? 0
         
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        return tasks?.count ?? 0
+        let sectionInfo = self.fetchedResultsController.sections![section] as NSFetchedResultsSectionInfo
+        return sectionInfo.numberOfObjects
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath)
@@ -142,19 +143,19 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath) as! TaskTableViewCell
-        let task = tasks![indexPath.row]
+        let task = self.fetchedResultsController.fetchedObjects?[indexPath.row]
         
         cell.task = task
-        let note = helper.unwrapBoolean(optionalBool: task.notes?.isEmpty) ? "No notes available" : helper.unwrapString(optionalString: task.notes)
-        cell.label_title.text = "\(helper.unwrapString(optionalString: task.name)) - Due on \(helper.dateToString(date: helper.unwrapDate(optionalDate: task.dueDate)))"
-        cell.label_startDate.text = "Start date - \(helper.dateToString(date: helper.unwrapDate(optionalDate: task.startDate)))"
-        cell.label_reminder.text = "Notify when due date is passed - \(task.remindWhenDatePassed == true ? "Yes" : "No")"
+        let note = helper.unwrapBoolean(optionalBool: task?.notes?.isEmpty) ? "No notes available" : helper.unwrapString(optionalString: task?.notes)
+        cell.label_title.text = "\(helper.unwrapString(optionalString: task?.name)) - Due on \(helper.dateToString(date: helper.unwrapDate(optionalDate: task?.dueDate)))"
+        cell.label_startDate.text = "Start date - \(helper.dateToString(date: helper.unwrapDate(optionalDate: task?.startDate)))"
+        cell.label_reminder.text = "Notify when due date is passed - \(task?.remindWhenDatePassed == true ? "Yes" : "No")"
         cell.txtView_notes.text = note
         cell.txtView_notes.layer.borderColor = UIColor.lightGray.cgColor
         cell.txtView_notes.layer.borderWidth = 1
         cell.txtView_notes.isEditable = false
         cell.progressBar_task.labelSize = 18
-        cell.progressBar_task.setProgress(to: Double(task.progress), withAnimation: true)
+        cell.progressBar_task.setProgress(to: Double(helper.unwrapInt16(optionalInt: task?.progress)), withAnimation: true)
         cell.progressBar_task.lineWidth = 18
         return cell
     }
@@ -167,68 +168,69 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     //MARK: - fetch results controller
     
-//    var _fetchedResultsController: NSFetchedResultsController<Task>? = nil
-//
-//    var fetchedResultsController: NSFetchedResultsController<Task> {
-//
-//        if _fetchedResultsController != nil
+    var _fetchedResultsController: NSFetchedResultsController<Task>? = nil
+    
+    var fetchedResultsController: NSFetchedResultsController<Task>
+    {
+        
+        if _fetchedResultsController != nil
+        {
+            return _fetchedResultsController!
+        }
+        
+        
+        let currentProject  = self.project
+        let request:NSFetchRequest<Task> = Task.fetchRequest()
+        //simpler version for just getting the albums
+        //   let albums:NSSet = (currentArtist?.albums)!
+        
+        request.fetchBatchSize = 20
+        //sort alphabetically
+        let taskDueDateDescriptor = NSSortDescriptor(key: "dueDate", ascending: false)
+        
+        //simpler version
+        //   albums.sortedArray(using: [albumNameSortDescriptor])
+        
+        
+        request.sortDescriptors = [taskDueDateDescriptor]
+        //we want the albums for the recordArtist - via the relationship
+        if(self.project != nil)
+        {
+            let predicate = NSPredicate(format: "project_tasks = %@", currentProject!)
+            request.predicate = predicate
+        }
+            
+//        else
 //        {
-//            return _fetchedResultsController!
-//        }
-//
-//
-//        let currentProject  = self.project
-//        let request:NSFetchRequest<Task> = Task.fetchRequest()
-//        //simpler version for just getting the albums
-//        //   let albums:NSSet = (currentArtist?.albums)!
-//
-//        request.fetchBatchSize = 20
-//        //sort alphabetically
-//        let taskSortDescriptors = NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))
-//
-//        //simpler version
-//        //   albums.sortedArray(using: [albumNameSortDescriptor])
-//
-//
-//        request.sortDescriptors = [taskSortDescriptors]
-//        //we want the albums for the recordArtist - via the relationship
-//        if(self.project != nil)
-//        {
-//            let predicate = NSPredicate(format: "project_tasks = %@", currentProject!)
+//            //just do all albums for the first artist in the list
+//            //replace this to get the first artist in the record
+//            let predicate = NSPredicate(format: "artist = %@","Pink Floyd")
 //            request.predicate = predicate
 //        }
-//
-////        else
-////        {
-////            //just do all albums for the first artist in the list
-////            //replace this to get the first artist in the record
-////            let predicate = NSPredicate(format: "project = %@","Pink Floyd")
-////            request.predicate = predicate
-////        }
-//
-//        let frc = NSFetchedResultsController<Task>(
-//            fetchRequest: request,
-//            managedObjectContext: managedObjectContext,
-//            sectionNameKeyPath: #keyPath(Task.project_tasks),
-//            cacheName:nil)
-//        frc.delegate = self
-//        _fetchedResultsController = frc
-//
-//        do
-//        {
-//            //    try frc.performFetch()
-//            try _fetchedResultsController!.performFetch()
-//        }
-//
-//        catch
-//        {
-//            let nserror = error as NSError
-//            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
-//        }
-//
-//
-//        return frc as! NSFetchedResultsController<NSFetchRequestResult> as! NSFetchedResultsController<Task>
-//    }//end var
+        
+        let frc = NSFetchedResultsController<Task>(
+            fetchRequest: request,
+            managedObjectContext: managedObjectContext,
+            sectionNameKeyPath: #keyPath(Task.project_tasks),
+            cacheName:nil)
+        frc.delegate = self
+        _fetchedResultsController = frc
+        
+        do
+        {
+            //    try frc.performFetch()
+            try _fetchedResultsController!.performFetch()
+        }
+        
+        catch
+        {
+            let nserror = error as NSError
+            fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+        }
+        
+        
+        return frc as! NSFetchedResultsController<NSFetchRequestResult> as! NSFetchedResultsController<Task>
+    }//end var
     
     //MARK: - fetch results table view functions
     

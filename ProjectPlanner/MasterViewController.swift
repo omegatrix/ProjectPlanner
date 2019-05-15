@@ -178,9 +178,10 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
-        let sortDescriptor = NSSortDescriptor(key: "dueDate", ascending: false)
+        let dueDateDescriptor = NSSortDescriptor(key: "dueDate", ascending: false)
+        let priorityDescriptor = NSSortDescriptor(key: "priority", ascending: true)
         
-        fetchRequest.sortDescriptors = [sortDescriptor]
+        fetchRequest.sortDescriptors = [dueDateDescriptor, priorityDescriptor]
         
         // Edit the section name key path and cache name if appropriate.
         // nil for section name key path means "no sections".
