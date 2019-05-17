@@ -108,9 +108,11 @@ class ProjectSummaryViewController: UIViewController
         let projectTasks = project?.tasks?.allObjects as? [Task]
         var projectCompletion = 0
         
+        let numberOfTasks: Int = projectTasks?.count ?? 0
+        
         print("tasks count \(projectTasks?.count)")
         
-        if(projectTasks!.count > 0)
+        if(numberOfTasks > 0)
         {
             for eachTask in projectTasks!
             {
@@ -131,12 +133,12 @@ class ProjectSummaryViewController: UIViewController
     
     func calculateDaysRemain(from: Date, to: Date) -> Int
     {
-        let daysRemain = Calendar.current.dateComponents([.day], from: from, to: to).day ?? 0
+        let daysRemain :Int  = Calendar.current.dateComponents([.day], from: from, to: to).day!
         
         print("today \(from)")
         print("due date \(to)")
         print("days remaining \(daysRemain)")
-        return daysRemain
+        return daysRemain > 0 ? daysRemain : 0
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)

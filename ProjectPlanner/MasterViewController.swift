@@ -21,9 +21,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     override func viewDidLoad()
     {
+        print("hits viewDidLoad in master\n")
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        navigationItem.leftBarButtonItem = editButtonItem
+        //navigationItem.leftBarButtonItem = editButtonItem
+        //navigationItem.leftBarButtonItem?.title = "Delete Multiple"
 
         
         if let split = splitViewController
@@ -35,6 +37,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     override func viewWillAppear(_ animated: Bool)
     {
+        print("hits viewWillAppear in master\n")
         clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
         super.viewWillAppear(animated)
     }
@@ -42,6 +45,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     @objc
     func insertNewObject(_ sender: Any)
     {
+        print("hits insertNewObject in master\n")
         let context = self.fetchedResultsController.managedObjectContext
         let newProject = Project(context: context)
              
@@ -67,13 +71,14 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
+        print("hits prepare in master\n")
         if segue.identifier == "showDetail"
         {
             if let indexPath = tableView.indexPathForSelectedRow
             {
                 let object = fetchedResultsController.object(at: indexPath)
                 let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
-                controller.project = object
+                controller.selectedProject = object
                 controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
@@ -82,19 +87,33 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     // MARK: - Table View
 
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+//    {
+//        print("hits didSelectRowAt in master\n")
+//        let selected = self.fetchedResultsController.object(at: indexPath)
+//
+//        if(selected != nil)
+//        {
+//            self.selectedProject = selected
+//        }
+//    }
+    
     override func numberOfSections(in tableView: UITableView) -> Int
     {
+        print("hits numberOfSections in master\n")
         return fetchedResultsController.sections?.count ?? 0
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
+        print("hits numberOfRowsInSection in master\n")
         let sectionInfo = fetchedResultsController.sections![section]
         return sectionInfo.numberOfObjects
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
+        print("hits cellForRowAt in master\n")
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let project = fetchedResultsController.object(at: indexPath)
         configureCell(cell, withProject: project)
@@ -109,6 +128,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath)
     {
+        print("hits editingStyle in master\n")
         if editingStyle == .delete
         {
             let context = fetchedResultsController.managedObjectContext
@@ -131,7 +151,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                         notificationIds.append(helper.unwrapString(optionalString: eachTask.notificationId))
                     }
                     
-                    notificationHelper.cancelNotification(notificationIds: notificationIds)
+                    notificationHelper.cancelNotification(notificationIds: notificationIds) //remove all the pending notifications
                 }
                 
                 if(hasEvent) //delete the calendar event
@@ -155,7 +175,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     func configureCell(_ cell: UITableViewCell, withProject project: Project)
     {
-        cell.textLabel!.text = project.name
+        print("hits configureCell in master\n")
+        let priority = helper.priorityLiteral(segmentIndex: project.priority)
+        cell.textLabel!.text = "\(helper.unwrapString(optionalString: project.name)) - \(priority) Prority"
         let unWrappedDate = helper.unwrapDate(optionalDate: project.dueDate)
         cell.detailTextLabel!.text = helper.dateToString(date: unWrappedDate)
         
@@ -167,6 +189,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     var fetchedResultsController: NSFetchedResultsController<Project>
     {
+        print("hits fetchedResultsController in master\n")
         if _fetchedResultsController != nil
         {
             return _fetchedResultsController!
@@ -178,7 +201,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         fetchRequest.fetchBatchSize = 20
         
         // Edit the sort key as appropriate.
-        let dueDateDescriptor = NSSortDescriptor(key: "dueDate", ascending: false)
+        let dueDateDescriptor = NSSortDescriptor(key: "dueDate", ascending: true)
         let priorityDescriptor = NSSortDescriptor(key: "priority", ascending: true)
         
         fetchRequest.sortDescriptors = [dueDateDescriptor, priorityDescriptor]
@@ -197,7 +220,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
         catch
         {
              // Replace this implementation with code to handle the error appropriately.
-             // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development. 
+             // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
              let nserror = error as NSError
              fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
         }
@@ -209,6 +232,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
     {
+        print("hits controllerWillChangeContent in master\n")
         tableView.beginUpdates()
     }
 
@@ -243,6 +267,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
     {
+        print("hits controllerDidChangeContent in master\n")
         tableView.endUpdates()
     }
 

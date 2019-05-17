@@ -226,6 +226,7 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
             currentProject.addToTasks(newTask)
             
             (UIApplication.shared.delegate as! AppDelegate).saveContext()
+            projectSummary?.refreshProjectProgress()
             
             dismiss(animated: true, completion: nil)
         }
