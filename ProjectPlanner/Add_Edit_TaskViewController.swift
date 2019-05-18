@@ -6,6 +6,10 @@
 //  Copyright © 2019 Arnold Anthonypillai. All rights reserved.
 //
 
+/*
+ Add, edit task functionalities are handle by this class
+*/
+
 import UIKit
 import CoreData
 
@@ -34,7 +38,7 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
         super.viewDidLoad()
         
         isPermissionGranted = notificationHelper.checkNotificationPermission()
-        print("isPermissionGranted ? \(isPermissionGranted)")
+        print("isPermissionGranted ? \(isPermissionGranted)\n")
 
         //delegate
         txtView_note.delegate = self
@@ -43,27 +47,27 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
         self.txtView_note.layer.borderColor = UIColor.lightGray.cgColor
         self.txtView_note.layer.borderWidth = 1
         
-        if task != nil
+        if(task != nil) //Update if task available
         {
-            txtField_name.text = task?.name
-            txtView_note.text = task?.notes
-            txtView_note.textColor = UIColor.black
-            switch_reminder.isOn = helper.unwrapBoolean(optionalBool: task?.remindWhenDatePassed)
-            slider_progress.value = helper.intToFloat(value: helper.unwrapInt16(optionalInt: task?.progress))
-            datePicker_startDate.date = helper.unwrapDate(optionalDate: task?.startDate)
-            datePicker_dueDate.date = helper.unwrapDate(optionalDate: task?.dueDate)
-            label_taskProgress.text = "Progress - \(helper.unwrapInt16(optionalInt: task?.progress)) %"
-            btn_submit.setTitle("Update", for: .normal)
+            self.txtField_name.text = task?.name
+            self.txtView_note.text = task?.notes
+            self.txtView_note.textColor = UIColor.black
+            self.switch_reminder.isOn = helper.unwrapBoolean(optionalBool: task?.remindWhenDatePassed)
+            self.slider_progress.value = helper.intToFloat(value: helper.unwrapInt16(optionalInt: task?.progress))
+            self.datePicker_startDate.date = helper.unwrapDate(optionalDate: task?.startDate)
+            self.datePicker_dueDate.date = helper.unwrapDate(optionalDate: task?.dueDate)
+            self.label_taskProgress.text = "Progress: \(helper.unwrapInt16(optionalInt: task?.progress)) %"
+            self.btn_submit.setTitle("Update", for: .normal)
         }
         
-        else
+        else //Save otherwise
         {
             //Assign a placeholder for the UITextView
             resetTextView()
             
-            slider_progress.value = 0
-            label_taskProgress.text = "Progress - 0 %"
-            btn_submit.setTitle("Save", for: .normal)
+            self.slider_progress.value = 0
+            self.label_taskProgress.text = "Progress: 0 %"
+            self.btn_submit.setTitle("Save", for: .normal)
         }
 
     }
@@ -74,8 +78,9 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
         self.txtView_note.textColor = UIColor.lightGray
     }
     
-    /*
-     The following two methods: textViewDidBeginEditing and textViewDidEndEditing are adapted from the StackOverflow thread https://stackoverflow.com/questions/27652227/text-view-uitextview-placeholder-swift
+    /****************************************************************************************************************************
+     The following two methods: textViewDidBeginEditing and textViewDidEndEditing are adapted from the StackOverflow thread
+     https://stackoverflow.com/questions/27652227/text-view-uitextview-placeholder-swift
      */
     
     func textViewDidBeginEditing(_ textView: UITextView)
@@ -97,11 +102,12 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
         }
     }
     
+    /******************************************************************************************************************************/
+    
     @IBAction func onProgressChange(_ sender: UISlider)
     {
-        label_taskProgress.text = "Progress - \(Int(sender.value)) %"
+        label_taskProgress.text = "Progress: \(Int(sender.value)) %"
     }
-    
     
     @IBAction func closeView(_ sender: UIButton)
     {
@@ -118,9 +124,9 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
         let projectCreatedOn = helper.unwrapDate(optionalDate: currentProject?.createdOn)
         let isNotify = helper.unwrapBoolean(optionalBool: switch_reminder.isOn)
         //let isPermissionGranted = notificationHelper.checkNotificationPermission()
-        print("permission to send notification granted ? \(isPermissionGranted)")
+        print("permission to send notification granted ? \(isPermissionGranted)\n")
         
-        if isTaskNameEmpty
+        if(isTaskNameEmpty)
         {
             let alertController = UIAlertController(title: "Alert", message: "Task name is mandatory!", preferredStyle: .alert)
             
@@ -134,7 +140,7 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
             return
         }
             
-        if(dueDate < today || startDate > dueDate)
+        if(dueDate < today || startDate > dueDate) //invalid dates check 1
         {
             let errorMessage = dueDate < today ? "Due date cannot be in the past!" : "Start date cannot occur after due date!"
             let alertController = UIAlertController(title: "Alert", message: errorMessage, preferredStyle: .alert)
@@ -149,7 +155,7 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
             return
         }
             
-        if(dueDate > projectDueDate || startDate < projectCreatedOn)
+        if(dueDate > projectDueDate || startDate < projectCreatedOn) //invalid dates check 2
         {
             let errorMessage = dueDate > projectDueDate ? "Task due date cannot occur after Project due date!" : "Task start date cannot be prior to project created date!"
             let alertController = UIAlertController(title: "Alert", message: errorMessage, preferredStyle: .alert)
@@ -194,7 +200,7 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
     
     func saveTask(currentProject: Project)
     {
-        if currentProject != nil
+        if(currentProject != nil)
         {
             let dueDate = helper.unwrapDate(optionalDate: datePicker_dueDate.date)
             let startDate = helper.unwrapDate(optionalDate: datePicker_startDate.date)
@@ -211,9 +217,10 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
             newTask.progress = Int16(slider_progress.value)
             newTask.remindWhenDatePassed = isNotify
             
-            if(isNotify)
+            if(isNotify) //schedule a notification
             {
-                let request = notificationHelper.prepareNotificationRequest(taskToNotify: newTask, projectName: projectName)
+                let request = notificationHelper.prepareNotificationRequest(taskToNotify: newTask, projectName: projectName) //create the notification request
+                
                 let isScheduleSuccess = notificationHelper.scheduleNotification(notificationRequest: request)
                 
                 if(isScheduleSuccess)
@@ -256,13 +263,16 @@ class Add_Edit_TaskViewController: UIViewController, UITextViewDelegate
             && newDueDate == oldDueDate
             && newStartDate == oldStartDate
             && newProgress == oldProgress
-            && newNotify == oldNotify)
+            && newNotify == oldNotify) //no changes made
         {
             let alertController = UIAlertController(title: "Alert", message: "No changes made!", preferredStyle: .alert)
             
-            let okAction = UIAlertAction(title: "OK", style: .default, handler: {action in
-                self.dismiss(animated: true, completion: nil)
-            })
+            let okAction = UIAlertAction(title: "OK", style: .default, handler:
+                {
+                    action in
+                    self.dismiss(animated: true, completion: nil)
+                }
+            )
             
             alertController.addAction(okAction)
             self.present(alertController, animated: true, completion: nil)

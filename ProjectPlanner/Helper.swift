@@ -6,6 +6,9 @@
 //  Copyright © 2019 Arnold Anthonypillai. All rights reserved.
 //
 
+/*
+ This struct is a utility helper that provides helper functions such as unwrapping optional values, date to string etc.
+*/
 
 import UIKit
 
@@ -22,7 +25,6 @@ struct Helper
             unWrappedString = optionalString
         }
         
-        print("Optional String unwraped -> \(unWrappedString)")
         return unWrappedString
     }
     
@@ -36,7 +38,6 @@ struct Helper
             unWrappedBool = optionalBool
         }
         
-        print("Optional Bool unwraped -> \(unWrappedBool)")
         return unWrappedBool
     }
     
@@ -50,11 +51,10 @@ struct Helper
             unWrappedDouble = optionalDouble
         }
         
-        print("Optional Bool unwraped -> \(unWrappedDouble)")
         return unWrappedDouble
     }
     
-    /* Optional unwrap -> Int */
+    /* Optional unwrap -> Int16 */
     func unwrapInt16(optionalInt: Int16?) -> Int16
     {
         var unWrappedInt: Int16 = 0 //default value to return
@@ -64,7 +64,6 @@ struct Helper
             unWrappedInt = optionalInt
         }
         
-        print("Optional Bool unwraped -> \(optionalInt)")
         return unWrappedInt
     }
     
@@ -83,7 +82,6 @@ struct Helper
             unWrappedDate = dateFormatter.date(from: unWrappedDateString) ?? Date.init()
         }
         
-        print("Optional Date unwraped -> \(unWrappedDate)")
         return unWrappedDate
     }
     
@@ -97,15 +95,15 @@ struct Helper
         return dateString
     }
     
-    func priorityLiteral(segmentIndex: Int16) -> String
+    func priorityLiteral(priorityValue: Int16) -> String
     {
         return
-            segmentIndex == 0
+            priorityValue == 0
             ?
             "High"
             :
             (
-                segmentIndex == 1
+                priorityValue == 1
                 ?
                 "Medium"
                 :
@@ -136,5 +134,4 @@ struct Helper
     {
         return Float(value)
     }
-    
 }

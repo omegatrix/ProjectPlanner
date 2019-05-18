@@ -13,7 +13,7 @@ class CircularProgressBar: UIView
     /*
      This file is created by using the code in https://gist.github.com/yogeshmanghnani/d73ad00eed7b3b55784c0d24e9852332
      
-     I used the following guide created by the developer https://codeburst.io/circular-progress-bar-in-ios-d06629700334
+     I followedthe guide created by the developer at https://codeburst.io/circular-progress-bar-in-ios-d06629700334
     */
 
     override func awakeFromNib()

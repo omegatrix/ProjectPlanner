@@ -30,34 +30,41 @@ class ProjectSummaryViewController: UIViewController
         if let project = self.project
         {
             setupView(currentProject: project)
-            btn_edit.isHidden = false
+            self.btn_edit.isHidden = false
         }
         
         else
         {
-            label_title.text = "Please select a project to continue!"
-            txtView_notes.text = nil
-            label_addedToCalendar.text = nil
-            label_createdOn.text = nil
-            progressBar_percentage.hideView()
-            progressBar_daysRemaining.hideView()
-            btn_edit.isHidden = true
+            clearView()
         }
         
     }
     
+    func clearView()
+    {
+        self.label_title.text = "Please select a project to continue!"
+        self.txtView_notes.text = nil
+        self.txtView_notes.isHidden = true
+        self.label_addedToCalendar.text = nil
+        self.label_createdOn.text = nil
+        self.progressBar_percentage.hideView()
+        self.progressBar_daysRemaining.hideView()
+        self.btn_edit.isHidden = true
+    }
+    
     func setupView(currentProject: Project)
     {
-        print("hits setup")
+        print("hits setup in summary\n")
         project = currentProject
         
         self.txtView_notes.layer.borderColor = UIColor.lightGray.cgColor
         self.txtView_notes.layer.borderWidth = 1
         self.txtView_notes.isEditable = false
+        self.txtView_notes.isHidden = false
         
         let projectName = helper.unwrapString(optionalString: currentProject.name)
         let notes = helper.unwrapBoolean(optionalBool: currentProject.notes?.isEmpty) ? "No notes available!" : helper.unwrapString(optionalString: currentProject.notes)
-        let priorityLiteral = helper.priorityLiteral(segmentIndex: helper.unwrapInt16(optionalInt: currentProject.priority))
+        let priorityLiteral = helper.priorityLiteral(priorityValue: helper.unwrapInt16(optionalInt: currentProject.priority))
         let addedToCalendar = "Added to calendar: \(helper.unwrapBoolean(optionalBool: currentProject.addToCalendar) ? "Yes" : "No")"
         let today = helper.unwrapDate(optionalDate: Date.init())
         let dueDate = helper.unwrapDate(optionalDate: currentProject.dueDate)
@@ -67,17 +74,15 @@ class ProjectSummaryViewController: UIViewController
         let totalProjectDays = calculateDaysRemain(from: projectCreatedOn, to: dueDate)
         let daysRemainPercentage = (daysRemain * 100) / (totalProjectDays > 0 ? totalProjectDays : 1)
         
-        print("today \(today) due date \(dueDate) created on \(projectCreatedOn)")
+        print("today \(today) due date \(dueDate) created on \(projectCreatedOn) \n")
         
-        label_title.text = "\(projectName) - Priority \(priorityLiteral) - Due on \(helper.dateToString(date: dueDate))"
+        label_title.text = "\(projectName) - \(priorityLiteral) Priority - Due on \(helper.dateToString(date: dueDate))"
         txtView_notes.text = notes
         label_addedToCalendar.text = addedToCalendar
         label_createdOn.text = "Created on - \(helper.dateToString(date: projectCreatedOn))"
         
         setProgress(projectPercentage: Double(projectPercentage))
         setDaysRemain(daysRemain: daysRemain, daysRemainPercentage: Double(daysRemainPercentage))
-        
-        
     }
     
     func setProgress(projectPercentage: Double)
@@ -110,7 +115,7 @@ class ProjectSummaryViewController: UIViewController
         
         let numberOfTasks: Int = projectTasks?.count ?? 0
         
-        print("tasks count \(projectTasks?.count)")
+        print("tasks count \(projectTasks?.count)\n")
         
         if(numberOfTasks > 0)
         {
@@ -123,7 +128,7 @@ class ProjectSummaryViewController: UIViewController
             
             let percentage = (projectCompletion > 0) ? (projectCompletion / projectTasks!.count) : projectCompletion
             
-            print("Percentage \(percentage)")
+            print("Percentage \(percentage)\n")
             
             return percentage
         }
@@ -135,9 +140,9 @@ class ProjectSummaryViewController: UIViewController
     {
         let daysRemain :Int  = Calendar.current.dateComponents([.day], from: from, to: to).day!
         
-        print("today \(from)")
-        print("due date \(to)")
-        print("days remaining \(daysRemain)")
+        print("today \(from)\n")
+        print("due date \(to)\n")
+        print("days remaining \(daysRemain)\n")
         return daysRemain > 0 ? daysRemain : 0
     }
     

@@ -6,6 +6,10 @@
 //  Copyright © 2019 Arnold Anthonypillai. All rights reserved.
 //
 
+/*
+ Local notifications are handled by this struct
+*/
+
 import UIKit
 import UserNotifications
 
@@ -16,7 +20,7 @@ struct NotificationHelper
     
     func checkNotificationPermission() -> Bool
     {
-        print("checking notification permission")
+        print("checking notification permission\n")
         var permission: Bool = false
         center.getNotificationSettings
             {
@@ -26,25 +30,25 @@ struct NotificationHelper
                 {
                     case .authorized:
                         permission = true
-                        print("notification permission granted")
+                        print("notification permission granted\n")
                     break
                     
                     case .denied:
-                        print("Notification permission denied!")
+                        print("Notification permission denied!\n")
                     break
                     
                     case .notDetermined:
-                        print("notification permission not determined")
+                        print("notification permission not determined\n")
                         permission = self.askNotificationPermission()
                     break
                     
                     case .provisional:
                         permission = true
-                        print("notification permission provisional")
+                        print("notification permission provisional\n")
                     break
                     
                     default:
-                        print("default case")
+                        print("default case\n")
                 }
             }
         
@@ -53,14 +57,14 @@ struct NotificationHelper
     
     func askNotificationPermission() -> Bool
     {
-        print("asking notification")
+        print("asking notification\n")
         var isPermissionGranted: Bool = false
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound])
         {
             (granted, error) in
             if(granted)
             {
-                print("permission granted")
+                print("permission granted\n")
                 isPermissionGranted = true
             }
         }
@@ -114,18 +118,18 @@ struct NotificationHelper
                     isSuccess = false
                 }
                 
-                print("notification scheduled")
+                print("notification scheduled\n")
             }
         )
         
-        print("scheduling success? \(isSuccess)")
+        print("scheduling success? \(isSuccess)\n")
         return isSuccess
     }
     
     func cancelNotification(notificationIds: [String])
     {
         center.removePendingNotificationRequests(withIdentifiers: notificationIds)
-        print("notifications cancelled \(notificationIds.first)")
+        print("notifications cancelled \(notificationIds.first)\n")
     }
 
 }

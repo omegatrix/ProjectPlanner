@@ -6,6 +6,10 @@
 //  Copyright © 2019 Arnold Anthonypillai. All rights reserved.
 //
 
+/*
+ Adding, editing project is handled by this class.
+*/
+
 import UIKit
 import CoreData
 import EventKit
@@ -33,7 +37,7 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         
         calendarHelper.checkCalendarPermission()
         
-        print("permission granted in project view controller \(isCalendarPermissionGranted)")
+        print("permission granted in project view controller \(isCalendarPermissionGranted)\n")
         
         //delegate
         txtView_note.delegate = self
@@ -42,39 +46,31 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         self.txtView_note.layer.borderColor = UIColor.lightGray.cgColor
         self.txtView_note.layer.borderWidth = 1
         
-        let dateFormatter = DateFormatter()
-        dateFormatter.timeZone = TimeZone(identifier: "GMT")
-        dateFormatter.dateFormat = "dd/MM/yyyy"
-        let dateselected = dateFormatter.string(from: datePicker_dueDate.date)
-        let newDate = dateFormatter.date(from: dateselected)
-        print("add project date string\(dateselected)")
-        print("add project date \(newDate)")
-    
-        
-        if project != nil
+        if(self.project != nil) //Update functionality if project available
         {
-            txtField_name.text = project?.name
-            txtView_note.text = project?.notes
-            txtView_note.textColor = UIColor.black
-            segment_priority.selectedSegmentIndex = helper.int16_To_Int(value: helper.unwrapInt16(optionalInt: project?.priority))
-            datePicker_dueDate.date = helper.unwrapDate(optionalDate: project?.dueDate)
-            switch_addToCalendar.isOn = helper.unwrapBoolean(optionalBool: project?.addToCalendar)
-            btn_submit.setTitle("Update", for: .normal)
+            self.txtField_name.text = project?.name
+            self.txtView_note.text = project?.notes
+            self.txtView_note.textColor = UIColor.black
+            self.segment_priority.selectedSegmentIndex = helper.int16_To_Int(value: helper.unwrapInt16(optionalInt: project?.priority))
+            self.datePicker_dueDate.date = helper.unwrapDate(optionalDate: project?.dueDate)
+            self.switch_addToCalendar.isOn = helper.unwrapBoolean(optionalBool: project?.addToCalendar)
+            self.btn_submit.setTitle("Update", for: .normal)
             
-            print("edit project, event id \(project?.calendarEventId)")
+            print("edit project, event id \(project?.calendarEventId)\n")
         }
         
-        else
+        else //Add project functionality
         {
             //Assign a placeholder for the UITextView
             resetTextView()
-            btn_submit.setTitle("Save", for: .normal)
+            self.btn_submit.setTitle("Save", for: .normal)
         }
     }
     
     
-    /*
-        The following two methods: textViewDidBeginEditing and textViewDidEndEditing are adopted from the StackOverflow thread https://stackoverflow.com/questions/27652227/text-view-uitextview-placeholder-swift
+    /*************************************************************************************************************************
+     The following two methods: textViewDidBeginEditing and textViewDidEndEditing are adopted from the StackOverflow thread
+     https://stackoverflow.com/questions/27652227/text-view-uitextview-placeholder-swift
      */
     
     func textViewDidBeginEditing(_ textView: UITextView)
@@ -96,6 +92,7 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         }
     }
     
+    /*****************************************************************************************************************************/
     
     @IBAction func onButtonPress(_ sender: UIButton)
     {
@@ -195,8 +192,8 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         
         if(addToCalendar)
         {
-            calendarEventId = calendarHelper.addCalendarEvent(currentProject: newProject)
-            print("event id in project controller \(calendarEventId)" )
+            calendarEventId = calendarHelper.addCalendarEvent(currentProject: newProject) //add the project to calendar event
+            print("event id in project controller \(calendarEventId)\n" )
                 
             if(calendarEventId.isEmpty)
             {
@@ -237,13 +234,13 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         let oldAddToCalendar = project.addToCalendar
         let oldEventIdentifier = project.calendarEventId
         
-        print("old calendar id \(oldEventIdentifier)")
+        print("old calendar id \(oldEventIdentifier)\n")
         
         if(newName == oldName
             && newNotes == oldNotes
             && newDueDate == oldDueDate
             && newPriority == oldPriority
-            && newAddToCalendar == oldAddToCalendar)
+            && newAddToCalendar == oldAddToCalendar) //nothing's changed
         {
             let alertController = UIAlertController(title: "Alert", message: "No changes made!", preferredStyle: .alert)
             
@@ -258,7 +255,7 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         
         for eachTask in tasks
         {
-            print("task due date \(eachTask.dueDate)")
+            print("task due date \(eachTask.dueDate)\n")
             if(helper.unwrapDate(optionalDate: eachTask.dueDate) > newDueDate)
             {
                 let alertController = UIAlertController(title: "Alert", message: "One of the tasks' due date occurs after the picked due date!", preferredStyle: .alert)
@@ -280,7 +277,7 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
         
         if let id = project.id
         {
-            fetchedRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+            fetchedRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg) //fetch the current project
             
             do
             {
@@ -333,7 +330,7 @@ class Add_Edit_ProjectViewController: UIViewController, UITextViewDelegate
                 do
                 {
                     try managedContext.save()
-                    projectSummary?.setupView(currentProject: objectToUpdate as! Project)
+                    projectSummary?.setupView(currentProject: objectToUpdate as! Project) //refresh the project summary
                 }
                     
                 catch

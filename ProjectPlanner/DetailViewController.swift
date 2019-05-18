@@ -6,6 +6,10 @@
 //  Copyright © 2019 Arnold Anthonypillai. All rights reserved.
 //
 
+/********************************************************************************************************************
+ Most of the code snippets have been adopted from the lecture notes and the the Master detail video by Philip Trwoga
+ *********************************************************************************************************************/
+
 import UIKit
 import CoreData
 
@@ -31,18 +35,46 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         print("hits viewDidLoad in detail\n")
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        print("This is the ID -> \(selectedProject?.id)")
+        print("This is the ID -> \(selectedProject?.id)\n")
         
+    }
+    
+    func unSelectProject()
+    {
+        selectedProject = nil
+    }
+    
+    func clearProjectSummary()
+    {
+        self.projectSummary?.clearView()
     }
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool
     {
         print("hits shouldPerformSegue in detail\n")
+        
         if(identifier == "editTaskSegue")
         {
             if(currentTask == nil)
             {
                 let alertController = UIAlertController(title: "Alert", message: "Please select a task to proceed!", preferredStyle: .alert)
+                
+                let okAction = UIAlertAction(title: "OK", style: .default)
+                {
+                    (action:UIAlertAction) in
+                }
+                
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+                return false
+            }
+        }
+        
+        if(identifier == "addTaskSegue")
+        {
+            if(selectedProject == nil)
+            {
+                let alertController = UIAlertController(title: "Alert", message: "Please select a corresponding project to proceed!", preferredStyle: .alert)
                 
                 let okAction = UIAlertAction(title: "OK", style: .default)
                 {
@@ -90,25 +122,14 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
+    /***********************************************************************************
+     TableView Functionalities
+     ************************************************************************************/
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         print("hits didSelectRowAt in detail\n")
-        let task = self.fetchedResultsController.object(at: indexPath)
-        let cell: TaskTableViewCell = tableView.cellForRow(at: indexPath)! as! TaskTableViewCell
-        
-        if(task != nil)
-        {
-            self.currentTask = task
-            print("selected taskname \(currentTask?.name)")
-        }
-        
-        if(cell != nil)
-        {
-            self.currentCell = cell
-            print("selected cell \(currentCell?.label_title.text)")
-        }
-        
-        print("task name \(task.name) notification id\(task.notificationId)")
+        self.tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+        self.currentTask = self.fetchedResultsController.object(at: indexPath) as Task
     }
     
     func numberOfSections(in tableView: UITableView) -> Int
@@ -140,7 +161,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 if(!notificationId.isEmpty)
                 {
                     let notificationIds = [notificationId]
-                    notificationHelper.cancelNotification(notificationIds: notificationIds)
+                    notificationHelper.cancelNotification(notificationIds: notificationIds) //cancel the notification
                 }
                 
                 try context.save()
@@ -152,7 +173,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
             }
             
-            self.projectSummary?.refreshProjectProgress()
+            self.projectSummary?.refreshProjectProgress() //recalculate the project progress
         }
     }
     
@@ -169,35 +190,34 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let cell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath) as! TaskTableViewCell
         let task = self.fetchedResultsController.object(at: indexPath)
         
-        self.currentCell = cell
-        self.currentTask = task
-        
-        self.configureCell()
+        self.configureCell(currentCell: cell, withTask: task)
         
         return cell
     }
     
-    func configureCell()
+    func configureCell(currentCell: TaskTableViewCell, withTask: Task)
     {
-        let currentCell = self.currentCell
-        let task = self.currentTask
-        currentCell?.task = task
-        let note = helper.unwrapBoolean(optionalBool: task!.notes?.isEmpty) ? "No notes available" : helper.unwrapString(optionalString: task?.notes)
-        currentCell?.label_title.text = "\(helper.unwrapString(optionalString: task?.name)) - Due on \(helper.dateToString(date: helper.unwrapDate(optionalDate: task?.dueDate)))"
-        currentCell?.label_startDate.text = "Start date - \(helper.dateToString(date: helper.unwrapDate(optionalDate: task?.startDate)))"
-        currentCell?.label_reminder.text = "Notify when due date is passed - \(task?.remindWhenDatePassed == true ? "Yes" : "No")"
-        currentCell?.txtView_notes.text = note
-        currentCell?.txtView_notes.layer.borderColor = UIColor.lightGray.cgColor
-        currentCell?.txtView_notes.layer.borderWidth = 1
-        currentCell?.txtView_notes.isEditable = false
-        currentCell?.progressBar_task.labelSize = 18
-        currentCell?.progressBar_task.setProgress(to: Double(helper.unwrapInt16(optionalInt: task?.progress)), withAnimation: true)
-        currentCell?.progressBar_task.lineWidth = 18
+        let currentCell = currentCell
+        let task = withTask
+        currentCell.task = task
+        let note = helper.unwrapBoolean(optionalBool: task.notes?.isEmpty) ? "No notes available" : helper.unwrapString(optionalString: task.notes)
+        currentCell.label_title.text = "\(helper.unwrapString(optionalString: task.name)) - Due on \(helper.dateToString(date: helper.unwrapDate(optionalDate: task.dueDate)))"
+        currentCell.label_startDate.text = "Start date - \(helper.dateToString(date: helper.unwrapDate(optionalDate: task.startDate)))"
+        currentCell.label_reminder.text = "Notify when due date is passed - \(task.remindWhenDatePassed == true ? "Yes" : "No")"
+        currentCell.txtView_notes.text = note
+        currentCell.txtView_notes.layer.borderColor = UIColor.lightGray.cgColor
+        currentCell.txtView_notes.layer.borderWidth = 1
+        currentCell.txtView_notes.isEditable = false
+        currentCell.progressBar_task.labelSize = 18
+        currentCell.progressBar_task.setProgress(to: Double(helper.unwrapInt16(optionalInt: task.progress)), withAnimation: true)
+        currentCell.progressBar_task.lineWidth = 18
         
     }
     
-    //MARK: - fetch results controller
     
+    /****************************************************************
+     Fetched Result Controller Functionalities
+     ****************************************************************/
     var _fetchedResultsController: NSFetchedResultsController<Task>? = nil
     
     var fetchedResultsController: NSFetchedResultsController<Task>
@@ -209,7 +229,6 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             return _fetchedResultsController!
         }
         
-        
         let currentProject  = self.selectedProject
         let request:NSFetchRequest<Task> = Task.fetchRequest()
         //simpler version for just getting the albums
@@ -217,7 +236,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         request.fetchBatchSize = 20
         //sort alphabetically
-        let taskDueDateDescriptor = NSSortDescriptor(key: "dueDate", ascending: true)
+        let taskDueDateDescriptor = NSSortDescriptor(key: "dueDate", ascending: true) //earliest due date
         
         //simpler version
         //   albums.sortedArray(using: [albumNameSortDescriptor])
@@ -227,17 +246,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         //we want the albums for the recordArtist - via the relationship
         if(self.selectedProject != nil)
         {
-            let predicate = NSPredicate(format: "project_tasks = %@", currentProject!)
+            let predicate = NSPredicate(format: "project_tasks = %@", currentProject!) //tasks via relationship
             request.predicate = predicate
         }
-            
-//        else
-//        {
-//            //just do all albums for the first artist in the list
-//            //replace this to get the first artist in the record
-//            let predicate = NSPredicate(format: "artist = %@","Pink Floyd")
-//            request.predicate = predicate
-//        }
         
         let frc = NSFetchedResultsController<Task>(
             fetchRequest: request,
@@ -261,10 +272,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         
         return frc as! NSFetchedResultsController<NSFetchRequestResult> as! NSFetchedResultsController<Task>
-    }//end var
+    }
     
-    //MARK: - fetch results table view functions
-    
+    /****************************************************************
+     Controller Functionalities
+     ****************************************************************/
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
     {
         self.tableView.beginUpdates()
@@ -286,7 +298,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     //must have a NSFetchedResultsController to work
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?)
     {
-        print("hits didChange in detail\n ")
+        print("hits didChange in detail\n")
         switch type
         {
             case NSFetchedResultsChangeType(rawValue: 0)!:
@@ -297,15 +309,17 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             case .delete:
                 tableView.deleteRows(at: [indexPath!], with: .fade)
             case .update:
-                self.configureCell()
-                tableView.moveRow(at: indexPath!, to: newIndexPath!)
+                let cell = self.tableView.cellForRow(at: indexPath!) as! TaskTableViewCell
+                let task = self.fetchedResultsController.object(at: indexPath!) as Task
+                self.configureCell(currentCell: cell, withTask: task)
             case .move:
-                self.configureCell()
+                let cell = self.tableView.cellForRow(at: indexPath!) as! TaskTableViewCell
+                let task = self.fetchedResultsController.object(at: indexPath!) as Task
+                self.configureCell(currentCell: cell, withTask: task)
                 tableView.moveRow(at: indexPath!, to: newIndexPath!)
                 //    default: break
         }
     }
-    
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
     {

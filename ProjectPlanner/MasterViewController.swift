@@ -6,6 +6,10 @@
 //  Copyright © 2019 Arnold Anthonypillai. All rights reserved.
 //
 
+/********************************************************************************************************************
+ Most of the code snippets have been adopted from the lecture notes and the the Master detail video by Philip Trwoga
+*********************************************************************************************************************/
+
 import UIKit
 import CoreData
 
@@ -14,6 +18,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     var detailViewController: DetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
+    var isInitialSetup: Bool = true
     let helper = Helper()
     let calendarHelper = CalendarHelper()
     let notificationHelper = NotificationHelper()
@@ -23,10 +28,9 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
     {
         print("hits viewDidLoad in master\n")
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
         //navigationItem.leftBarButtonItem = editButtonItem
         //navigationItem.leftBarButtonItem?.title = "Delete Multiple"
-
         
         if let split = splitViewController
         {
@@ -78,25 +82,27 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             {
                 let object = fetchedResultsController.object(at: indexPath)
                 let controller = (segue.destination as! UINavigationController).topViewController as! DetailViewController
+                self.detailViewController = controller
                 controller.selectedProject = object
-                controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-                controller.navigationItem.leftItemsSupplementBackButton = true
+//                controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+//                controller.navigationItem.leftItemsSupplementBackButton = true
             }
         }
     }
 
-    // MARK: - Table View
+    
+    /***********************************************************************************
+     TableView Functionalities
+    ************************************************************************************/
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
+        print("hits didSelectRowAt in master\n")
+        
+        tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
+        let currentProject = fetchedResultsController.object(at: indexPath) as Project
+        self.detailViewController?.selectedProject = currentProject
 
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
-//    {
-//        print("hits didSelectRowAt in master\n")
-//        let selected = self.fetchedResultsController.object(at: indexPath)
-//
-//        if(selected != nil)
-//        {
-//            self.selectedProject = selected
-//        }
-//    }
+    }
     
     override func numberOfSections(in tableView: UITableView) -> Int
     {
@@ -160,7 +166,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 }
                 
                 try context.save()
-                
+                self.detailViewController?.clearProjectSummary()
+                self.detailViewController?.unSelectProject()
             }
             
             catch
@@ -172,11 +179,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             }
         }
     }
-
+    
     func configureCell(_ cell: UITableViewCell, withProject project: Project)
     {
         print("hits configureCell in master\n")
-        let priority = helper.priorityLiteral(segmentIndex: project.priority)
+        let priority = helper.priorityLiteral(priorityValue: project.priority)
         cell.textLabel!.text = "\(helper.unwrapString(optionalString: project.name)) - \(priority) Prority"
         let unWrappedDate = helper.unwrapDate(optionalDate: project.dueDate)
         cell.detailTextLabel!.text = helper.dateToString(date: unWrappedDate)
@@ -185,8 +192,11 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     }
 
-    // MARK: - Fetched results controller
-
+    
+    /****************************************************************
+     Fetched Result Controller Functionalities
+     ****************************************************************/
+    var _fetchedResultsController: NSFetchedResultsController<Project>? = nil
     var fetchedResultsController: NSFetchedResultsController<Project>
     {
         print("hits fetchedResultsController in master\n")
@@ -225,11 +235,21 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
              fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
         }
         
+        let numberOfProjects: Int = _fetchedResultsController?.fetchedObjects?.count ?? 0
+        
+        if(numberOfProjects > 0 && self.isInitialSetup) //select the very first project when initially setup
+        {
+            self.tableView(self.tableView, didSelectRowAt: IndexPath(row: 0, section: 0))
+            self.isInitialSetup = false
+        }
+        
         return _fetchedResultsController!
     }
     
-    var _fetchedResultsController: NSFetchedResultsController<Project>? = nil
-
+    
+    /****************************************************************
+     Controller Functionalities
+     ****************************************************************/
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
     {
         print("hits controllerWillChangeContent in master\n")
@@ -238,6 +258,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange sectionInfo: NSFetchedResultsSectionInfo, atSectionIndex sectionIndex: Int, for type: NSFetchedResultsChangeType)
     {
+        print("hits didChange sectionInfo in master\n")
         switch type
         {
             case .insert:
@@ -251,6 +272,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?)
     {
+        print("hits didChange in master\n")
         switch type
         {
             case .insert:

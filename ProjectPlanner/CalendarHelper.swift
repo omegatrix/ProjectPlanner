@@ -6,6 +6,10 @@
 //  Copyright © 2019 Arnold Anthonypillai. All rights reserved.
 //
 
+/*
+ Calendar event functionalities are handled by this struct
+*/
+
 import UIKit
 import EventKit
 
@@ -24,25 +28,25 @@ struct CalendarHelper
         {
             case .authorized:
                 status = true
-                print(" permission granted!")
+                print(" permission granted!\n")
             break
             
             case .notDetermined:
-                print(" permission not determined!")
+                print(" permission not determined!\n")
                 status = self.askCalendarPermission()
-                print(" permission not determined ? \(status)")
+                print(" permission not determined ? \(status)\n")
             break
             
             case .denied:
-                print(" permission denied!")
+                print(" permission denied!\n")
             break
             
             case .restricted:
-                print(" permission restricted!")
+                print(" permission restricted!\n")
             break
             
             default:
-                print("Default case!")
+                print("Default case!\n")
         }
         
         return status
@@ -50,7 +54,7 @@ struct CalendarHelper
     
     func askCalendarPermission() -> Bool
     {
-        print("asking permission for the first time!")
+        print("asking permission for the first time!\n")
         var isPermissionGranted = false
         eventStore.requestAccess(to: .event, completion:
             {
@@ -58,7 +62,7 @@ struct CalendarHelper
                 if granted
                 {
                     isPermissionGranted = true
-                    print("permission granted? \(isPermissionGranted)")
+                    print("permission granted? \(isPermissionGranted)\n")
                 }
         }
         )
@@ -79,7 +83,7 @@ struct CalendarHelper
         var projectCalendar: EKCalendar? = nil
         var calendarEventId = ""
         
-        for cal in calendars
+        for cal in calendars //check if there is a Project Planner calendar available
         {
             if(cal.title == "Project Planner")
             {
@@ -91,7 +95,7 @@ struct CalendarHelper
         
         if(!isCalendarExist)
         {
-            projectCalendar = createProjectCalendar()
+            projectCalendar = createProjectCalendar() //create the calendar
             print("calendar created \(projectCalendar?.title) \n")
         }
         
@@ -112,7 +116,7 @@ struct CalendarHelper
         catch
         {
             let nserror = error as NSError
-            print("Unresolved error \(nserror), \(nserror.userInfo)")
+            print("Unresolved error \(nserror), \(nserror.userInfo)\n")
         }
         
         calendarEventId = helper.unwrapString(optionalString: event.eventIdentifier)
@@ -140,13 +144,13 @@ struct CalendarHelper
         do
         {
             try eventStore.saveCalendar(newCalendar, commit: true)
-            print("Project Planner calendar created!")
+            print("Project Planner calendar created!\n")
         }
             
         catch
         {
             let nserror = error as NSError
-            print("Unresolved error \(nserror), \(nserror.userInfo)")
+            print("Unresolved error \(nserror), \(nserror.userInfo)\n")
         }
         
         return newCalendar
@@ -156,15 +160,15 @@ struct CalendarHelper
     {
         let calendarEventId = helper.unwrapString(optionalString: projectToUpdate.calendarEventId)
         
-        print("\(calendarEventId) in updatecalendar")
+        print("\(calendarEventId) in updatecalendar\n")
         if(calendarEventId.isEmpty)
         {
             return
         }
         
-        if let updateCalendarEvent = eventStore.event(withIdentifier: calendarEventId)
+        if let updateCalendarEvent = eventStore.event(withIdentifier: calendarEventId) //update the calendar components with new data
         {
-            print("name to be updated\(projectToUpdate.name) \nnotes to be updated \(projectToUpdate.notes)")
+            print("name to be updated\(projectToUpdate.name) \nnotes to be updated \(projectToUpdate.notes) \n")
             updateCalendarEvent.title = projectToUpdate.name
             updateCalendarEvent.startDate = projectToUpdate.dueDate
             updateCalendarEvent.endDate = projectToUpdate.dueDate
@@ -174,13 +178,13 @@ struct CalendarHelper
             {
                 
                 try eventStore.save(updateCalendarEvent, span: .thisEvent, commit: true)
-                print("event updated!")
+                print("event updated!\n")
             }
                 
             catch
             {
                 let nserror = error as NSError
-                print("Unresolved error \(nserror), \(nserror.userInfo)")
+                print("Unresolved error \(nserror), \(nserror.userInfo)\n")
             }
         }
     }
@@ -198,13 +202,13 @@ struct CalendarHelper
             do
             {
                 try eventStore.remove(calendarEventToDelete, span: EKSpan.thisEvent, commit: true)
-                print("event deleted!")
+                print("event deleted!\n")
             }
             
             catch
             {
                 let nserror = error as NSError
-                print("Unresolved error \(nserror), \(nserror.userInfo)")
+                print("Unresolved error \(nserror), \(nserror.userInfo)\n")
             }
         }
     }
