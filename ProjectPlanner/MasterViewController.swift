@@ -167,7 +167,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
                 
                 try context.save()
                 self.detailViewController?.clearProjectSummary()
-                self.detailViewController?.unSelectProject()
+                self.detailViewController?.selectedProject = nil
             }
             
             catch

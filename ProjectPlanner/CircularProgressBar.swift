@@ -92,7 +92,8 @@ class CircularProgressBar: UIView
                 currentTime += 0.05
                 let percent = currentTime/2
                 self.progress = Int(progress * percent)
-                self.label.text = (self.showDaysRemain) ? "\(self.daysRemain) Days Left" : "\(Int(progress * percent)) % Complete"
+                self.label.text = (self.showDaysRemain) ? "\(self.daysRemain) Day(s) Left" : "\(Int(progress * percent))% Complete"
+                self.label.textColor = UIColor(red: 0/255, green: 128/255, blue: 255/255, alpha: 1.0) //aqua colour
                 self.setForegroundLayerColorForSafePercent()
                 self.configLabel()
             }

@@ -165,6 +165,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 }
                 
                 try context.save()
+                currentTask = nil
             }
 
             catch
